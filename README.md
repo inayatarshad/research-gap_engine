@@ -104,6 +104,10 @@ npx vercel deploy --prod
 Cold start is ~3 s while the 23 MB corpus is parsed and the inverted index is built; subsequent
 requests on a warm instance return in ~250 ms.
 
+Runtime footprint is ~410 MB RSS (175 MB for the parsed corpus, the rest for the inverted index
+over 57,722 distinct terms). Both are process-wide singletons, and Fluid Compute reuses instances
+across concurrent requests, so that cost is paid once per instance rather than once per request.
+
 ## Architecture
 
 ```
