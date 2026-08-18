@@ -3,13 +3,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { renderBrief } from "@/lib/brief";
-import { type Preset } from "@/lib/presets";
+import { PRESETS, type Preset } from "@/lib/presets";
 import { LANG_BY_CODE, TASK_BY_ID } from "@/lib/taxonomy";
 import type { Overview } from "@/lib/overview";
 import type { CorpusMeta, Landscape, Scope } from "@/lib/types";
 
 import { Composer } from "./Composer";
-import { HeroBlock, LandingBody } from "./Landing";
+import { StudioStart } from "./StudioStart";
 import { Concentration, Quadrant, Timeline } from "./Charts";
 import { EvidenceDrawer, PaperRow, type EvidenceQuery } from "./EvidenceDrawer";
 import { GapCard } from "./GapCard";
@@ -176,13 +176,13 @@ export function Studio({ meta, overview }: { meta: CorpusMeta; overview: Overvie
       )}
 
       <main className="wrap" style={{ paddingBottom: 100 }}>
-        {!landscape && <HeroBlock overview={overview} />}
-
         {!landscape && (
-          <Composer scope={scope} setScope={setScope} onRun={run} busy={busy} />
+          <StudioStart overview={overview}>
+            <Composer scope={scope} setScope={setScope} onRun={run} busy={busy} />
+          </StudioStart>
         )}
 
-        {!landscape && !busy && <LandingBody overview={overview} onPick={runPreset} />}
+        {!landscape && !busy && <PresetRow onPick={runPreset} />}
 
         {error && (
           <div
@@ -1045,6 +1045,50 @@ function Method({ scope, landscape }: { scope: Scope; landscape: Landscape }) {
           </p>
         </div>
       )}
+    </div>
+  );
+}
+
+
+/** Quick starts under the studio composer. */
+function PresetRow({ onPick }: { onPick: (p: Preset) => void }) {
+  return (
+    <div style={{ marginTop: 30 }}>
+      <div className="eyebrow" style={{ marginBottom: 12 }}>
+        Or start from an expedition
+      </div>
+      <div className="grid-auto">
+        {PRESETS.map((p, i) => (
+          <button
+            key={p.id}
+            onClick={() => onPick(p)}
+            className="card card-lift rise"
+            style={{
+              padding: 16,
+              textAlign: "left",
+              cursor: "pointer",
+              animationDelay: `${0.04 * i}s`,
+              display: "flex",
+              flexDirection: "column",
+              gap: 6,
+              minHeight: 124,
+            }}
+          >
+            <div className="serif" style={{ fontSize: 17.5, lineHeight: 1.25 }}>
+              {p.title}
+            </div>
+            <div style={{ fontSize: 13, color: "var(--muted)" }}>{p.blurb}</div>
+            <div style={{ flex: 1 }} />
+            <div
+              className="hairline"
+              style={{ paddingTop: 9, fontSize: 12.5, color: "var(--faint)", display: "flex", gap: 8 }}
+            >
+              <span style={{ flex: 1 }}>{p.expect}</span>
+              <span style={{ color: "var(--copper)" }}>→</span>
+            </div>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
