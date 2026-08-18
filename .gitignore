@@ -1,0 +1,14 @@
+node_modules/
+.next/
+out/
+build/
+.cache/
+.DS_Store
+*.log
+.env*.local
+.vercel
+next-env.d.ts
+tsconfig.tsbuildinfo
+
+# Intermediate source, regenerable via `npm run ingest:openalex`
+data/openalex-corpus.json
