@@ -2,10 +2,10 @@
  * Domain taxonomy for the Research Gap & Discovery Engine.
  *
  * Three gazetteers drive both ingest-time enrichment and query-time expansion:
- *   LANGUAGES  — with resource tiers from Joshi et al. (ACL 2020), "The State and
+ *   LANGUAGES: with resource tiers from Joshi et al. (ACL 2020), "The State and
  *                Fate of Linguistic Diversity and Inclusion in the NLP World".
- *   TASKS      — NLP task taxonomy with surface aliases.
- *   METHODS    — modelling families, bucketed by methodological era.
+ *   TASKS: NLP task taxonomy with surface aliases.
+ *   METHODS: modelling families, bucketed by methodological era.
  *
  * Keeping this explicit (rather than letting an LLM guess) is what makes every
  * downstream number reproducible and auditable.
@@ -23,7 +23,7 @@ export interface LanguageEntry {
    * Lower tier => scarcer labelled + unlabelled data => higher gap opportunity.
    */
   tier: ResourceTier;
-  /** Approximate speaker count in millions — used for the impact term. */
+  /** Approximate speaker count in millions: used for the impact term. */
   speakersM: number;
   family: string;
   script: string;
@@ -216,7 +216,7 @@ export const METHODS: MethodEntry[] = [
 ];
 
 /* ------------------------------------------------------------------ *
- * Well-known resources — matched literally, then supplemented by the
+ * Well-known resources: matched literally, then supplemented by the
  * pattern-based extractor in scripts/ingest.mjs.
  * ------------------------------------------------------------------ */
 
@@ -260,7 +260,7 @@ export const TIER_LABEL: Record<ResourceTier, string> = {
 export const TIER_GLOSS: Record<ResourceTier, string> = {
   0: "Virtually no labelled or unlabelled data. Excluded from nearly all multilingual work.",
   1: "Some unlabelled text exists, but almost no labelled resources and little community.",
-  2: "A collector's paradise — unlabelled data exists and labelling efforts have begun.",
+  2: "A collector's paradise: unlabelled data exists and labelling efforts have begun.",
   3: "A strong web presence and a growing cultural community pushing resources forward.",
   4: "Large unlabelled corpora and a good spread of labelled datasets across tasks.",
   5: "Dominant in NLP research; industrial investment and every benchmark by default.",

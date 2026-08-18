@@ -53,7 +53,7 @@ export function Section({
 
 export function TierBadge({ tier, showLabel = true }: { tier: ResourceTier; showLabel?: boolean }) {
   return (
-    <span className="tier" data-t={tier} title={`Tier ${tier} — ${TIER_LABEL[tier]}. ${TIER_GLOSS[tier]}`}>
+    <span className="tier" data-t={tier} title={`Tier ${tier}: ${TIER_LABEL[tier]}. ${TIER_GLOSS[tier]}`}>
       T{tier}
       {showLabel && <span style={{ opacity: 0.75 }}>{TIER_LABEL[tier]}</span>}
     </span>
@@ -104,8 +104,8 @@ export function Trend({ value }: { value: number }) {
   const color = up ? "var(--sage)" : down ? "var(--copper)" : "var(--faint)";
   return (
     <span className="mono" style={{ color, fontSize: 11.5, display: "inline-flex", gap: 3 }}>
-      {up ? "▲" : down ? "▼" : "—"}
-      {value ? `${value.toFixed(2)}×` : "—"}
+      {up ? "▲" : down ? "▼" : ", "}
+      {value ? `${value.toFixed(2)}×` : ", "}
     </span>
   );
 }

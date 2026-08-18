@@ -106,7 +106,7 @@ function buildQueries(LANGUAGES, TASKS) {
   const lowResource = LANGUAGES.filter((l) => l.tier <= 3);
   const midHigh = LANGUAGES.filter((l) => l.tier >= 4);
 
-  // 1. Per-language sweeps — the backbone of the corpus.
+  // 1. Per-language sweeps: the backbone of the corpus.
   for (const lang of lowResource) {
     queries.push(`${lang.name} natural language processing`);
     queries.push(`${lang.name} corpus dataset annotation`);
@@ -117,7 +117,7 @@ function buildQueries(LANGUAGES, TASKS) {
     }
   }
 
-  // 2. High-resource anchors — needed so "under-studied" is measured against
+  // 2. High-resource anchors: needed so "under-studied" is measured against
   //    something rather than asserted.
   for (const lang of midHigh) {
     queries.push(`${lang.name} natural language processing benchmark`);
@@ -295,7 +295,7 @@ async function main() {
   );
 
   const queries = buildQueries(LANGUAGES, TASKS);
-  console.log(`\n  Research Gap Engine — corpus ingest`);
+  console.log(`\n  Research Gap Engine: corpus ingest`);
   console.log(`  ${queries.length} OpenAlex queries queued\n`);
 
   const raw = new Map();

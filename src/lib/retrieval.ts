@@ -3,7 +3,7 @@
  *
  * Two signals are combined:
  *   1. BM25 over title + abstract, with the title weighted up.
- *   2. Taxonomy expansion — a query naming a language, task or method is
+ *   2. Taxonomy expansion: a query naming a language, task or method is
  *      expanded to every surface alias for that concept before scoring, and
  *      papers tagged with the concept get a structural bonus.
  *
@@ -116,7 +116,7 @@ export function parseQuery(raw: string): ParsedQuery {
     terms.set(t, Math.max(terms.get(t) ?? 0, w));
   };
 
-  // Regions and families first — "African languages" must resolve to a set of
+  // Regions and families first: "African languages" must resolve to a set of
   // languages, not degrade into free text.
   for (const group of LANGUAGE_GROUPS) {
     const hit = group.aliases.find((a) => matchAlias(q, a));
@@ -252,7 +252,7 @@ export function retrieve(
 
     if (s <= 0) continue;
 
-    // Gentle recency and citation priors — enough to break ties, not enough to
+    // Gentle recency and citation priors: enough to break ties, not enough to
     // bury a foundational older paper.
     const age = Math.max(0, 2026 - p.year);
     s *= 1 + 0.22 * Math.exp(-age / 7);

@@ -10,10 +10,10 @@ import { Bar, EvidenceLink, Trend } from "./primitives";
  * ================================================================== */
 
 const QUAD_COPY = {
-  emerging: { label: "Emerging", note: "Growing from a small base — the most room for a new entrant." },
-  hot: { label: "Hot", note: "Large and still accelerating — competitive, but funded and visible." },
-  crowded: { label: "Crowded", note: "High volume, flat or falling momentum — hard to add to." },
-  dormant: { label: "Dormant", note: "Small and cooling — either solved, or blocked on something." },
+  emerging: { label: "Emerging", note: "Growing from a small base: the most room for a new entrant." },
+  hot: { label: "Hot", note: "Large and still accelerating: competitive, but funded and visible." },
+  crowded: { label: "Crowded", note: "High volume, flat or falling momentum, hard to add to." },
+  dormant: { label: "Dormant", note: "Small and cooling: either solved, or blocked on something." },
 } as const;
 
 export function Quadrant({
@@ -332,11 +332,11 @@ export function Concentration({
             }}
           />
           <div
-            title="0.15 — moderate"
+            title="0.15: moderate"
             style={{ position: "absolute", left: "37.5%", top: -3, bottom: -3, width: 1, background: "var(--line-strong)" }}
           />
           <div
-            title="0.25 — high"
+            title="0.25: high"
             style={{ position: "absolute", left: "62.5%", top: -3, bottom: -3, width: 1, background: "var(--line-strong)" }}
           />
         </div>
@@ -359,7 +359,7 @@ export function Concentration({
         </div>
         {datasetFacets.length === 0 ? (
           <p style={{ fontSize: 13, color: "var(--muted)" }}>
-            No named resources could be extracted from these abstracts — itself a signal that work
+            No named resources could be extracted from these abstracts, itself a signal that work
             here is not anchored to shared, citable datasets.
           </p>
         ) : (

@@ -3,11 +3,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { renderBrief } from "@/lib/brief";
-import { PRESETS, type Preset } from "@/lib/presets";
+import { type Preset } from "@/lib/presets";
 import { LANG_BY_CODE, TASK_BY_ID } from "@/lib/taxonomy";
+import type { Overview } from "@/lib/overview";
 import type { CorpusMeta, Landscape, Scope } from "@/lib/types";
 
 import { Composer } from "./Composer";
+import { HeroBlock, LandingBody } from "./Landing";
 import { Concentration, Quadrant, Timeline } from "./Charts";
 import { EvidenceDrawer, PaperRow, type EvidenceQuery } from "./EvidenceDrawer";
 import { GapCard } from "./GapCard";
@@ -53,7 +55,7 @@ const SECTIONS = [
   { id: "papers", label: "Papers" },
 ];
 
-export function Studio({ meta }: { meta: CorpusMeta }) {
+export function Studio({ meta, overview }: { meta: CorpusMeta; overview: Overview }) {
   const [scope, setScope] = useState<Scope>(EMPTY_SCOPE);
   const [landscape, setLandscape] = useState<Landscape | null>(null);
   const [busy, setBusy] = useState(false);
@@ -93,7 +95,7 @@ export function Studio({ meta }: { meta: CorpusMeta }) {
     run(s);
   };
 
-  // A landscape is worth linking to — restore one from the URL on load so an
+  // A landscape is worth linking to: restore one from the URL on load so an
   // analysis can be shared or cited directly.
   useEffect(() => {
     const s = readUrl();
@@ -131,7 +133,7 @@ export function Studio({ meta }: { meta: CorpusMeta }) {
       <Header meta={meta} landscape={landscape} active={active} onReset={() => setLandscape(null)} />
 
       <main className="wrap" style={{ paddingBottom: 100 }}>
-        {!landscape && <Hero meta={meta} />}
+        {!landscape && <HeroBlock overview={overview} />}
 
         <div
           style={{
@@ -148,7 +150,7 @@ export function Studio({ meta }: { meta: CorpusMeta }) {
           <Composer scope={scope} setScope={setScope} onRun={run} busy={busy} compact={!!landscape} />
         </div>
 
-        {!landscape && !busy && <Presets onPick={runPreset} />}
+        {!landscape && !busy && <LandingBody overview={overview} onPick={runPreset} />}
 
         {error && (
           <div
@@ -211,13 +213,39 @@ function Header({
       >
         <button
           onClick={onReset}
-          style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "flex", alignItems: "baseline", gap: 9 }}
+          aria-label="HERMÈS: back to start"
+          style={{
+            background: "none",
+            border: "none",
+            padding: 0,
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            gap: 11,
+          }}
         >
-          <span className="display" style={{ fontSize: 23, letterSpacing: "-0.02em" }}>
-            Lacuna
-          </span>
-          <span className="eyebrow" style={{ fontSize: 9 }}>
-            research gap engine
+          {/* The mark carries its own navy ground, so it is set as a tile
+              rather than floated on the ivory page. */}
+          <img
+            src="/logo.png"
+            alt=""
+            width={34}
+            height={28}
+            style={{
+              height: 28,
+              width: "auto",
+              borderRadius: 7,
+              display: "block",
+              boxShadow: "0 1px 3px rgba(17,34,80,.18)",
+            }}
+          />
+          <span style={{ display: "flex", alignItems: "baseline", gap: 9 }}>
+            <span className="display" style={{ fontSize: 23, letterSpacing: "-0.02em" }}>
+              HERMÈS
+            </span>
+            <span className="eyebrow" style={{ fontSize: 9 }}>
+              research gap engine
+            </span>
           </span>
         </button>
 
@@ -250,81 +278,6 @@ function Header({
         </span>
       </div>
     </header>
-  );
-}
-
-function Hero({ meta }: { meta: CorpusMeta }) {
-  return (
-    <div style={{ padding: "clamp(48px, 9vw, 96px) 0 30px", maxWidth: 880 }}>
-      <div className="eyebrow rise" style={{ marginBottom: 16 }}>
-        {meta.paperCount.toLocaleString()} papers · {meta.languagesCovered} languages ·{" "}
-        {meta.tasksCovered} tasks · {meta.yearRange[0]}–{meta.yearRange[1]}
-      </div>
-      <h1
-        className="display rise"
-        style={{ fontSize: "clamp(42px, 7.2vw, 84px)", margin: 0, animationDelay: ".05s" }}
-      >
-        Every field has a shape.
-        <br />
-        <em style={{ color: "var(--sapphire)" }}>The holes have one too.</em>
-      </h1>
-      <p
-        className="rise"
-        style={{
-          marginTop: 22,
-          fontSize: "clamp(16px, 1.7vw, 18.5px)",
-          lineHeight: 1.62,
-          color: "var(--muted)",
-          maxWidth: 660,
-          animationDelay: ".12s",
-        }}
-      >
-        Lacuna maps what NLP research is studying and — more usefully — what it keeps skipping. It
-        scores under-researched language and task pairings, argues why each one is a real gap rather
-        than a non-problem, and shows you the papers behind every number it prints.
-      </p>
-    </div>
-  );
-}
-
-function Presets({ onPick }: { onPick: (p: Preset) => void }) {
-  return (
-    <div style={{ marginTop: 34 }}>
-      <div className="eyebrow" style={{ marginBottom: 13 }}>
-        Or start from an expedition
-      </div>
-      <div className="grid-auto">
-        {PRESETS.map((p, i) => (
-          <button
-            key={p.id}
-            onClick={() => onPick(p)}
-            className="card card-lift rise"
-            style={{
-              padding: 16,
-              textAlign: "left",
-              cursor: "pointer",
-              animationDelay: `${0.05 * i}s`,
-              display: "flex",
-              flexDirection: "column",
-              gap: 6,
-              minHeight: 132,
-            }}
-          >
-            <div className="serif" style={{ fontSize: 18.5, lineHeight: 1.25 }}>
-              {p.title}
-            </div>
-            <div style={{ fontSize: 12.5, color: "var(--muted)" }}>{p.blurb}</div>
-            <div style={{ flex: 1 }} />
-            <div
-              className="hairline"
-              style={{ paddingTop: 9, fontSize: 12, color: "var(--faint)", lineHeight: 1.45 }}
-            >
-              {p.expect}
-            </div>
-          </button>
-        ))}
-      </div>
-    </div>
   );
 }
 
@@ -398,7 +351,7 @@ function Results({
       <div style={{ marginTop: 40 }}>
         <Empty
           title="No papers matched this scope"
-          hint="Usually a scoping artefact rather than a finding — widen the years, drop a filter, or describe the area differently."
+          hint="Usually a scoping artefact rather than a finding, widen the years, drop a filter, or describe the area differently."
         />
       </div>
     );
@@ -466,7 +419,7 @@ function Results({
         id="matrix"
         eyebrow="Coverage matrix"
         title="Which languages get which tasks"
-        lede="Each cell is a language–task pairing across the whole index, not just this cohort. Hatched cells have no indexed paper at all — hover one to see whether related languages have solved it."
+        lede="Each cell is a language–task pairing across the whole index, not just this cohort. Hatched cells have no indexed paper at all: hover one to see whether related languages have solved it."
       >
         <GapMatrix
           landscape={l}
@@ -719,7 +672,7 @@ function EquityPanel({ landscape: l, onEvidence }: { landscape: Landscape; onEvi
       </p>
       {rows.length === 0 ? (
         <p style={{ fontSize: 13, color: "var(--faint)" }}>
-          No lower-resource languages appear in this cohort — itself the finding.
+          No lower-resource languages appear in this cohort, itself the finding.
         </p>
       ) : (
         <div style={{ display: "grid", gap: 9 }}>
@@ -891,7 +844,7 @@ function Method({ scope, landscape }: { scope: Scope; landscape: Landscape }) {
             Papers come from the ACL Anthology bulk export supplemented with OpenAlex records,
             filtered to work touching lower-resource or multilingual settings. Language, task, method
             and dataset tags are assigned by matching an explicit gazetteer against each title and
-            abstract — no model inference — so every count is reproducible from the source text.
+            abstract, with no model inference, so every count is reproducible from the source text.
           </p>
           <p style={{ margin: "0 0 11px" }}>
             Retrieval is BM25 over title and abstract with taxonomy expansion: a query naming a
@@ -903,7 +856,7 @@ function Method({ scope, landscape }: { scope: Scope; landscape: Landscape }) {
           </p>
           <p style={{ margin: 0, color: "var(--ink)" }}>
             <strong style={{ fontWeight: 500 }}>Limitations.</strong> Absence from this index is not
-            proof of absence from the literature — a paper is missed if it has no abstract, sits
+            proof of absence from the literature: a paper is missed if it has no abstract, sits
             outside the indexed venues, or names its language in vocabulary the gazetteer does not
             carry. Tags reflect what a paper mentions, which over-counts languages listed in passing
             by multilingual surveys. Treat these counts as a defensible starting point for a

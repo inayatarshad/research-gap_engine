@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ==================================================================
-   Lacuna — design tokens
+   HERMÈS: design tokens
    Palette is the supplied navy/sapphire/taupe/champagne/ivory set,
    kept deliberately light. Two functional accents are derived from it:
    copper for opportunity, sage for saturation.
@@ -18,7 +18,7 @@
   --color-copper: #a2662f;
   --color-sage: #647a5c;
 
-  --font-display: var(--font-instrument), ui-serif, Georgia, serif;
+  --font-display: var(--font-display-face), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono-face), ui-monospace, "SFMono-Regular", monospace;
 }
@@ -36,8 +36,8 @@
   --sage: #647a5c;
   --sage-soft: #e4e9df;
 
-  --muted: #5f6580;
-  --faint: #8a8fa3;
+  --muted: #4d5468;
+  --faint: #6e7488;
 
   --line: rgba(17, 34, 80, 0.1);
   --line-soft: rgba(17, 34, 80, 0.06);
@@ -73,8 +73,8 @@ body {
   background-attachment: fixed;
   color: var(--ink);
   font-family: var(--font-sans);
-  font-size: 15px;
-  line-height: 1.6;
+  font-size: 15.5px;
+  line-height: 1.62;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   font-feature-settings: "cv05" 1, "ss01" 1;
@@ -90,13 +90,14 @@ body {
 .display {
   font-family: var(--font-display);
   font-weight: 400;
-  letter-spacing: -0.015em;
-  line-height: 1.08;
+  letter-spacing: -0.012em;
+  line-height: 1.06;
 }
 
 .serif {
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 500;
+  letter-spacing: -0.006em;
 }
 
 .mono {
@@ -107,8 +108,8 @@ body {
 
 .eyebrow {
   font-family: var(--font-mono);
-  font-size: 10.5px;
-  letter-spacing: 0.13em;
+  font-size: 11px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--faint);
   font-weight: 500;
@@ -439,4 +440,47 @@ a {
   .conc-grid {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+
+/* ---------------- landing grids ---------------- */
+
+.metric-row {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 8px;
+}
+
+.demo-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: minmax(0, 1.5fr) minmax(260px, 1fr);
+}
+
+.step-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 1000px) {
+  .metric-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .demo-grid,
+  .step-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .metric-row { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---------------- landing motion ---------------- */
+
+@keyframes ping {
+  0% { transform: scale(1); opacity: .7; }
+  70%, 100% { transform: scale(2.6); opacity: 0; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }

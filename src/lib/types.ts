@@ -55,7 +55,7 @@ export interface Scope {
 export interface ScoredPaper {
   paper: Paper;
   score: number;
-  /** Which query terms matched — drives the "why this paper" affordance. */
+  /** Which query terms matched: drives the "why this paper" affordance. */
   matched: string[];
 }
 
@@ -110,8 +110,8 @@ export interface Gap {
   score: number;
   /**
    * True when the gap sits inside the language the user actually asked about.
-   * Adjacent gaps are still surfaced — a neighbouring language is often where
-   * the method transfers — but they never outrank the user's own scope.
+   * Adjacent gaps are still surfaced, since a neighbouring language is often where
+   * the method transfers, but they never outrank the user's own scope.
    */
   focus: boolean;
   components: GapComponent[];
@@ -132,7 +132,7 @@ export interface ResearchQuestion {
   text: string;
   rationale: string;
   difficulty: "Starter" | "Substantial" | "Ambitious";
-  /** e.g. "≈ 1 MSc thesis" — helps a reader judge fit. */
+  /** e.g. "≈ 1 MSc thesis", helps a reader judge fit. */
   shape: string;
 }
 

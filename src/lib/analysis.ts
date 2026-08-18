@@ -95,7 +95,7 @@ function facet(
 }
 
 /* ------------------------------------------------------------------ *
- * Themes — distinctive terms via log-odds against the whole corpus
+ * Themes: distinctive terms via log-odds against the whole corpus
  * ------------------------------------------------------------------ */
 
 function distinctiveTerms(
@@ -197,7 +197,7 @@ function percentile(values: number[], p: number): number {
 
 /**
  * Languages comparable enough that "they solved it, we didn't" is a fair
- * argument — weighted by how plausibly a method actually transfers.
+ * argument: weighted by how plausibly a method actually transfers.
  *
  * Shared script matters most in practice (tokenisation, orthography, encoding
  * all carry over); shared family carries morphology. "Indo-European" alone is
@@ -272,10 +272,10 @@ function scoreGap(
   const own = cov.pair.get(`${lang.code}|${taskId}`)?.length ?? 0;
   const taskName = TASK_BY_ID.get(taskId)?.name ?? taskId;
 
-  // 1. Scarcity — how little exists here, saturating around a dozen papers.
+  // 1. Scarcity: how little exists here, saturating around a dozen papers.
   const scarcity = clamp01(1 - Math.log1p(own) / Math.log1p(14));
 
-  // 2. Peer evidence — the discriminator between "a gap" and "a non-problem".
+  // 2. Peer evidence: the discriminator between "a gap" and "a non-problem".
   //    Counts are weighted by transfer plausibility, so ten papers in a closely
   //    related language count for more than ten in a distant cousin.
   const peers = peersOf(lang);
@@ -291,15 +291,15 @@ function scoreGap(
   const weightedPeer = peerCounts.reduce((a, b) => a + b.count * b.proximity, 0);
   const peer = clamp01(Math.log1p(weightedPeer) / Math.log1p(40));
 
-  // 3. Momentum — an absent task that the field is actively pushing on is urgent.
+  // 3. Momentum: an absent task that the field is actively pushing on is urgent.
   const momentum = clamp01((taskMomentum - 0.5) / 1.8);
 
-  // 4. Impact — many speakers, few resources.
+  // 4. Impact: many speakers, few resources.
   const speakerTerm = clamp01(Math.log1p(lang.speakersM) / Math.log1p(300));
   const tierTerm = (5 - lang.tier) / 5;
   const impact = clamp01(0.45 * speakerTerm + 0.55 * tierTerm);
 
-  // 5. Feasibility — is there any groundwork to build on?
+  // 5. Feasibility: is there any groundwork to build on?
   const foundation = FOUNDATION_TASKS.reduce(
     (a, t) => a + (cov.pair.get(`${lang.code}|${t}`)?.length ?? 0),
     0,
@@ -330,7 +330,7 @@ function scoreGap(
               .slice(0, 3)
               .map((p) => `${p.langName} ${p.count}`)
               .join(", ")}), so the task is known to be worth doing and the methods transfer.`
-          : `No comparable language has attempted ${taskName} either — this is unexplored territory rather than an obvious omission.`,
+          : `No comparable language has attempted ${taskName} either, this is unexplored territory rather than an obvious omission.`,
     },
     {
       key: "momentum",
@@ -386,13 +386,13 @@ function questionsFor(
       text: `How far does zero-shot cross-lingual transfer from ${peerName} carry ${taskName} in ${lang.name}, and what error classes remain?`,
       rationale: `${peer[0]?.count ?? 0} ${peerName} papers establish the task; ${lang.name} shares script or family, so transfer is the cheapest credible baseline and the residual errors define the real research problem.`,
       difficulty: "Starter",
-      shape: "A focused empirical paper — an existing multilingual model, a small evaluation set, a careful error taxonomy.",
+      shape: "A focused empirical paper: an existing multilingual model, a small evaluation set, a careful error taxonomy.",
     });
     qs.push({
       text: `What does a first annotated ${taskName} dataset for ${lang.name} need to contain for annotators to reach acceptable agreement?`,
       rationale: `Without a reference set no ${lang.name} ${taskName} claim is falsifiable. Annotation guideline design is itself publishable when the language raises phenomena the source guidelines never anticipated.`,
       difficulty: "Substantial",
-      shape: "A resource paper — guidelines, inter-annotator agreement, a baseline, a public release.",
+      shape: "A resource paper: guidelines, inter-annotator agreement, a baseline, a public release.",
     });
   }
 
@@ -408,7 +408,7 @@ function questionsFor(
   if (kind === "method-lag") {
     qs.push({
       text: `What is actually gained by moving ${lang.name} ${taskName} from ${cohortEra}-era methods to ${fieldEra}-era ones, and where does the gain disappear?`,
-      rationale: `The wider field has moved to ${fieldEra} while this pairing is still reported with ${cohortEra} methods. Quantifying the delta — including where newer methods fail on this language's morphology or script — is a clean contribution.`,
+      rationale: `The wider field has moved to ${fieldEra} while this pairing is still reported with ${cohortEra} methods. Quantifying the delta: including where newer methods fail on this language's morphology or script: is a clean contribution.`,
       difficulty: "Starter",
       shape: "A controlled comparison with matched data and honest ablations.",
     });
@@ -419,7 +419,7 @@ function questionsFor(
       text: `What would a trustworthy evaluation benchmark for ${lang.name} ${taskName} look like, given the absence of any shared test set?`,
       rationale: `Results in this area are not comparable across papers because there is no common test set. A benchmark plus a leaderboard is the highest-leverage intervention available.`,
       difficulty: "Ambitious",
-      shape: "A benchmark and shared-task proposal — high citation ceiling, high coordination cost.",
+      shape: "A benchmark and shared-task proposal: high citation ceiling, high coordination cost.",
     });
   }
 
@@ -433,7 +433,7 @@ function questionsFor(
   }
 
   qs.push({
-    text: `Which ${lang.name}-specific linguistic properties — script, morphology, orthographic variation — do current ${taskName} models systematically mishandle?`,
+    text: `Which ${lang.name}-specific linguistic properties, script, morphology, orthographic variation, do current ${taskName} models systematically mishandle?`,
     rationale: `Language-specific error analysis is consistently under-supplied relative to demand, transfers directly into dataset and model design, and does not require large compute.`,
     difficulty: "Substantial",
     shape: "A diagnostic study with a hand-built challenge set.",
@@ -453,7 +453,7 @@ function concentrationOf(papers: Paper[]): DatasetConcentration {
   if (total === 0) {
     return {
       hhi: 0,
-      verdict: "No named datasets could be extracted — a signal in itself that resources here are informal or unpublished.",
+      verdict: "No named datasets could be extracted: a signal in itself that resources here are informal or unpublished.",
       topShare: 0,
       topName: null,
       distinctDatasets: 0,
@@ -474,10 +474,10 @@ function concentrationOf(papers: Paper[]): DatasetConcentration {
     verdict = `Spread across ${sorted.length} named resources, so findings are less likely to be single-corpus artefacts.`;
 
   // A low HHI computed over a handful of papers is not evidence of a healthy
-  // ecosystem — it usually means most papers never name a shared resource at
+  // ecosystem: it usually means most papers never name a shared resource at
   // all, which is the more important thing to say.
   if (coverage < 0.4) {
-    verdict += ` But only ${Math.round(coverage * 100)}% of papers here name a resource at all, so the index rests on a thin base — the more telling signal is how much work in this area is not anchored to any citable dataset.`;
+    verdict += ` But only ${Math.round(coverage * 100)}% of papers here name a resource at all, so the index rests on a thin base, the more telling signal is how much work in this area is not anchored to any citable dataset.`;
   }
 
   return {
@@ -582,7 +582,7 @@ export function analyse(input: AnalyseInput): Landscape {
   /* --- matrix ---------------------------------------------------- */
 
   // Rows are chosen in priority bands so the matrix always contains a fair
-  // comparison: the focus language, its structural peers (even sparse ones —
+  // comparison: the focus language, its structural peers (even sparse ones, 
   // those are the informative rows), then whatever dominates the cohort.
   const ROW_LIMIT = 14;
   const peerCodes = new Set<string>();
@@ -715,7 +715,7 @@ export function analyse(input: AnalyseInput): Landscape {
     ? [...new Set([...focusLangs, ...matrixLangs.filter((l) => l.tier <= 3).map((l) => l.code)])]
     : matrixLangs.filter((l) => l.tier <= 3).map((l) => l.code);
   // Scan every task, not just the matrix columns. The matrix shows the twelve
-  // busiest tasks, but a gap is by definition somewhere the volume is low — so
+  // busiest tasks, but a gap is by definition somewhere the volume is low, so
   // restricting the search to popular columns hides exactly what it should find.
   const candidateTasks = TASKS.map((t) => t.id);
 
@@ -747,7 +747,7 @@ export function analyse(input: AnalyseInput): Landscape {
       const recent = pairPapers.filter((p) => p.year >= RECENT_FROM).length;
 
       // Classification runs most-specific first. Each branch has to clear a
-      // real bar — an earlier, looser version of this labelled almost every
+      // real bar: an earlier, looser version of this labelled almost every
       // pairing an "evaluation void", which made the output useless.
       const anchored = pairPapers.filter(
         (p) =>
@@ -781,7 +781,7 @@ export function analyse(input: AnalyseInput): Landscape {
       )
         kind = "evaluation-void";
 
-      if (!kind) continue; // healthy — not a gap
+      if (!kind) continue; // healthy: not a gap
 
       // Wording stays inside what the corpus can support: absence of a paper in
       // this index is not proof that no such paper exists anywhere.
@@ -845,7 +845,7 @@ export function analyse(input: AnalyseInput): Landscape {
   }
 
   // A question about Urdu must be answered about Urdu first. Adjacent-language
-  // gaps stay in the list — they are genuinely useful leads — but below.
+  // gaps stay in the list: they are genuinely useful leads, but below.
   gaps.sort((a, b) => b.score - a.score);
 
   /** Ten variations on one gap type is a worse answer than five distinct ones. */
@@ -882,7 +882,7 @@ export function analyse(input: AnalyseInput): Landscape {
     verdict:
       ERA_ORDER.indexOf(corpusEra.era) - ERA_ORDER.indexOf(cohortEra.era) >= 1
         ? `This area is still reported mainly with ${cohortEra.era}-era methods while the surrounding corpus has moved to ${corpusEra.era}. That distance is itself a publishable opportunity.`
-        : `Methodologically current — this area tracks the wider corpus (${cohortEra.era}-era methods dominate both).`,
+        : `Methodologically current: this area tracks the wider corpus (${cohortEra.era}-era methods dominate both).`,
   };
 
   const lowRes = papers.filter((p) => p.languages.some((l) => (LANG_BY_CODE.get(l)?.tier ?? 5) <= 2));
@@ -926,8 +926,8 @@ export function analyse(input: AnalyseInput): Landscape {
       ? {
           level: "thin",
           note: understood
-            ? `Only ${papers.length} papers matched. That is too few to characterise a field — treat everything below as a lead to check, not a finding.`
-            : `Only ${papers.length} papers matched, and nothing in this query mapped onto a known language, task or method. The analysis below is running on loose keyword overlap and should not be relied on — try naming a language or task directly.`,
+            ? `Only ${papers.length} papers matched. That is too few to characterise a field: treat everything below as a lead to check, not a finding.`
+            : `Only ${papers.length} papers matched, and nothing in this query mapped onto a known language, task or method. The analysis below is running on loose keyword overlap and should not be relied on, try naming a language or task directly.`,
         }
       : papers.length < 45
         ? {
@@ -990,7 +990,7 @@ export function analyse(input: AnalyseInput): Landscape {
 }
 
 /* ------------------------------------------------------------------ *
- * Narrative — assembled from the computed statistics, never invented
+ * Narrative: assembled from the computed statistics, never invented
  * ------------------------------------------------------------------ */
 
 function pct(x: number) {
@@ -1024,14 +1024,14 @@ function buildNarrative(a: {
     return {
       headline: "No papers matched this scope",
       paragraphs: [
-        "Nothing in the indexed corpus matches the current filters. That is usually a scoping artefact rather than a finding — widen the year range, drop a filter, or describe the area in different words.",
+        "Nothing in the indexed corpus matches the current filters. That is usually a scoping artefact rather than a finding, widen the year range, drop a filter, or describe the area in different words.",
       ],
       signals: [],
     };
   }
 
   paragraphs.push(
-    `This scope returns ${n} papers out of ${a.corpus.meta.paperCount} indexed, spanning ${a.timeline.find((t) => t.count > 0)?.year ?? "—"} to ${[...a.timeline].reverse().find((t) => t.count > 0)?.year ?? "—"}. ` +
+    `This scope returns ${n} papers out of ${a.corpus.meta.paperCount} indexed, spanning ${a.timeline.find((t) => t.count > 0)?.year ?? ", "} to ${[...a.timeline].reverse().find((t) => t.count > 0)?.year ?? ", "}. ` +
       (topLang
         ? `${topLang.label} is the most studied language here with ${topLang.count} papers (${pct(topLang.share)} of the cohort), and ${topTask ? `${topTask.label.toLowerCase()} is the dominant task at ${topTask.count} papers` : "task labels are thinly distributed"}.`
         : "No single language dominates the cohort."),
@@ -1049,7 +1049,7 @@ function buildNarrative(a: {
 
   paragraphs.push(
     growth > 0
-      ? `Publication activity is ${growth >= 1.25 ? "accelerating" : growth >= 0.9 ? "holding steady" : "slowing"} — ${recent} papers in the last three years against ${prior} in the three before, a ${growth.toFixed(2)}x change. ${a.methodLag.verdict}`
+      ? `Publication activity is ${growth >= 1.25 ? "accelerating" : growth >= 0.9 ? "holding steady" : "slowing"}: ${recent} papers in the last three years against ${prior} in the three before, a ${growth.toFixed(2)}x change. ${a.methodLag.verdict}`
       : `${a.methodLag.verdict}`,
   );
 
@@ -1060,7 +1060,7 @@ function buildNarrative(a: {
   if (emerging.length || crowded.length) {
     paragraphs.push(
       (crowded.length
-        ? `Attention concentrates on ${crowded.map((c) => c.label.toLowerCase()).join(", ")} — high volume, flat or falling momentum. `
+        ? `Attention concentrates on ${crowded.map((c) => c.label.toLowerCase()).join(", ")}: high volume, flat or falling momentum. `
         : "") +
         (emerging.length
           ? `Meanwhile ${emerging.map((c) => c.label.toLowerCase()).join(", ")} ${emerging.length === 1 ? "is" : "are"} growing from a small base, which is where a new entrant has the most room.`
@@ -1079,12 +1079,12 @@ function buildNarrative(a: {
     { label: "Papers in scope", value: String(n), detail: `of ${a.corpus.meta.paperCount} indexed` },
     {
       label: "Momentum",
-      value: growth ? `${growth.toFixed(2)}×` : "—",
+      value: growth ? `${growth.toFixed(2)}×` : ", ",
       detail: "last 3 years vs the 3 before",
     },
     {
       label: "Dataset concentration",
-      value: a.concentration.hhi ? a.concentration.hhi.toFixed(2) : "—",
+      value: a.concentration.hhi ? a.concentration.hhi.toFixed(2) : ", ",
       detail: a.concentration.topName ? `HHI · top resource ${a.concentration.topName}` : "HHI over named resources",
     },
     {

@@ -184,7 +184,7 @@ export function EvidenceDrawer({
                 Nothing indexed here
               </div>
               <p style={{ fontSize: 13.5, lineHeight: 1.6, maxWidth: 340, margin: "0 auto" }}>
-                That absence is the finding. It means no paper in this corpus carries both tags —
+                That absence is the finding. It means no paper in this corpus carries both tags, 
                 not that no such work exists anywhere.
               </p>
             </div>

@@ -1,5 +1,5 @@
 /**
- * Engine smoke test — exercises retrieval + analysis without booting Next.
+ * Engine smoke test: exercises retrieval + analysis without booting Next.
  *   npx tsx scripts/smoke.ts "Urdu NLP"
  */
 
@@ -35,7 +35,7 @@ for (const q of queries) {
   });
   const ms = Date.now() - t;
 
-  console.log(`\n${"=".repeat(78)}\n"${q}"  —  ${L.cohortSize} papers, ${ms} ms`);
+  console.log(`\n${"=".repeat(78)}\n"${q}", ${L.cohortSize} papers, ${ms} ms`);
   console.log(`understood: ${L.resolved.interpreted.join(" | ") || "(free text only)"}`);
   console.log(`\nHEADLINE: ${L.narrative.headline}`);
   console.log(`\n${L.narrative.paragraphs.map((p) => `  ${p}`).join("\n\n")}`);

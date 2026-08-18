@@ -1,13 +1,17 @@
 import type { Metadata, Viewport } from "next";
-import { Instrument_Serif, Inter, JetBrains_Mono } from "next/font/google";
+import { Jost, Inter, JetBrains_Mono } from "next/font/google";
 
 import "./globals.css";
 
-const instrument = Instrument_Serif({
+/**
+ * Jost is a geometric humanist sans in the Futura lineage: it carries the
+ * display voice. Inter handles body and dense data, where a geometric face
+ * loses legibility at small sizes.
+ */
+const display = Jost({
   subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  variable: "--font-instrument",
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-display-face",
   display: "swap",
 });
 
@@ -25,14 +29,20 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Lacuna — Research Gap & Discovery Engine",
+  title: "HERMÈS, Research Gap & Discovery Engine",
   description:
-    "Map what a research field is studying, and what it is quietly overlooking. Lacuna analyses 16,000+ NLP papers to surface under-researched language and task combinations, with the evidence behind every claim.",
+    "HERMÈS maps what a research field is studying and what it keeps skipping. It analyses 16,605 NLP papers to score under-researched language and task pairings, with the evidence behind every number.",
   openGraph: {
-    title: "Lacuna — Research Gap & Discovery Engine",
-    description:
-      "Map what a research field is studying, and what it is quietly overlooking.",
+    title: "HERMÈS, Research Gap & Discovery Engine",
+    description: "Map what a research field is studying, and what it keeps skipping.",
     type: "website",
+    images: [{ url: "/logo.png", width: 211, height: 173, alt: "HERMÈS" }],
+  },
+  twitter: {
+    card: "summary",
+    title: "HERMÈS, Research Gap & Discovery Engine",
+    description: "Map what a research field is studying, and what it keeps skipping.",
+    images: ["/logo.png"],
   },
 };
 
@@ -42,7 +52,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${instrument.variable} ${inter.variable} ${mono.variable}`}>
+    <html lang="en" className={`${display.variable} ${inter.variable} ${mono.variable}`}>
       <body>{children}</body>
     </html>
   );

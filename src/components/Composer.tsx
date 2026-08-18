@@ -51,7 +51,7 @@ export function Composer({
         });
         setPreview(await res.json());
       } catch {
-        /* aborted or offline — the readout is advisory only */
+        /* aborted or offline: the readout is advisory only */
       }
     }, 260);
     return () => {
@@ -108,7 +108,7 @@ export function Composer({
           onKeyDown={(e) => {
             if (e.key === "Enter" && ready && !busy) onRun(scope);
           }}
-          placeholder="Describe a research area — “Urdu NLP”, “hate speech in code-mixed text”, “speech for African languages”"
+          placeholder="Describe a research area: “Urdu NLP”, “hate speech in code-mixed text”, “speech for African languages”"
           aria-label="Research area"
           style={{
             flex: "1 1 340px",
@@ -179,7 +179,7 @@ export function Composer({
         <YearRange scope={scope} setScope={setScope} />
       </div>
 
-      {/* live readout — the instrument responding before you commit */}
+      {/* live readout: the instrument responding before you commit */}
       <div
         style={{
           marginTop: 10,

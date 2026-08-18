@@ -74,7 +74,7 @@ export function GapMatrix({
           {tasks.map((t) => (
             <div
               key={t.id}
-              title={`${t.name} — ${t.total} papers corpus-wide`}
+              title={`${t.name}: ${t.total} papers corpus-wide`}
               style={{
                 fontSize: 10.5,
                 lineHeight: 1.15,
@@ -277,7 +277,7 @@ function Tooltip({
             lineHeight: 1.45,
           }}
         >
-          {cell.peerCount} papers do this in related languages — the task matters here too, nobody
+          {cell.peerCount} papers do this in related languages, the task matters here too, nobody
           has done it.
         </div>
       )}
@@ -292,7 +292,7 @@ function Tooltip({
             lineHeight: 1.45,
           }}
         >
-          No related language attempts this either — likely genuinely unexplored rather than
+          No related language attempts this either: likely genuinely unexplored rather than
           overlooked.
         </div>
       )}

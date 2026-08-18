@@ -160,7 +160,7 @@ function resolveVenue(booktitle, journal) {
     if (re.test(raw)) return { venue: name, weight };
   }
   // Keep the real workshop name rather than collapsing every workshop into one
-  // bucket — venue diversity is itself part of the landscape.
+  // bucket: venue diversity is itself part of the landscape.
   const cleaned = tidyVenue(raw);
   return { venue: cleaned || "ACL Anthology", weight: /workshop/i.test(raw) ? 2 : 3 };
 }
@@ -190,7 +190,7 @@ async function ensureBib() {
 }
 
 async function main() {
-  console.log("\n  Research Gap Engine — corpus build\n");
+  console.log("\n  Research Gap Engine: corpus build\n");
   await ensureBib();
 
   const tax = await loadTaxonomy();
@@ -276,7 +276,7 @@ async function main() {
   }
 
   console.log(`  Anthology: ${papers.length} papers kept from ${scanned} scanned`);
-  console.log(`    dropped — no abstract ${noAbstract} · out of scope ${notRelevant} · untaggable ${offTopic}`);
+  console.log(`    dropped: no abstract ${noAbstract} · out of scope ${notRelevant} · untaggable ${offTopic}`);
 
   /* --- merge the OpenAlex sweep -------------------------------- */
 

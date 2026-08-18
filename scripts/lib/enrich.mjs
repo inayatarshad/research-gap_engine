@@ -1,7 +1,7 @@
 /**
  * Shared taxonomy loading and rule-based enrichment, used by both corpus
  * builders. Every tag it attaches is traceable to a literal surface string in
- * the paper's title or abstract — no model guesses, so the downstream counts
+ * the paper's title or abstract: no model guesses, so the downstream counts
  * are reproducible.
  */
 

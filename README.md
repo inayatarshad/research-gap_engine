@@ -1,8 +1,8 @@
-# Lacuna — Research Gap & Discovery Engine
+# HERMÈS: Research Gap & Discovery Engine
 
 **Every field has a shape. The holes have one too.**
 
-Lacuna maps what NLP research is studying and — more usefully — what it keeps skipping. It scores
+HERMÈS maps what NLP research is studying and: more usefully, what it keeps skipping. It scores
 under-researched language and task pairings, argues why each one is a real gap rather than a
 non-problem, and shows the papers behind every number it prints.
 
@@ -16,7 +16,7 @@ Finding a research gap is normally done by reading for months and noticing an ab
 but it does not scale and it cannot tell you whether the absence you found is a genuine opportunity
 or a subject nobody studies because it does not matter.
 
-Lacuna makes that judgement explicit. For any language × task pairing it asks: *how little exists
+HERMÈS makes that judgement explicit. For any language × task pairing it asks: *how little exists
 here, how much exists in comparable languages, is the field moving on this, how many people speak
 it, and is there enough groundwork to start?* Those five terms produce a score, and the score is
 always shown decomposed so a reader can disagree with the weighting rather than the conclusion.
@@ -24,7 +24,7 @@ always shown decomposed so a reader can disagree with the weighting rather than 
 ## What makes it more than a search box
 
 - **A coverage matrix where the voids are the point.** Empty cells are hatched in copper, not left
-  blank — a blank cell in a heatmap reads as "no data" when here it means "no research". Hover an
+  blank: a blank cell in a heatmap reads as "no data" when here it means "no research". Hover an
   empty cell and it tells you how many related languages have solved the same task: the adjacency
   argument that separates a real gap from a non-problem.
 - **Peer evidence weighted by transfer plausibility.** Shared script counts for more than shared
@@ -32,7 +32,7 @@ always shown decomposed so a reader can disagree with the weighting rather than 
   Polish to Urdu.
 - **Dataset concentration (HHI).** When most results in an area come from one corpus, published
   performance describes that corpus as much as it describes the language. If most papers name no
-  resource at all, it says that instead — the more telling signal.
+  resource at all, it says that instead, the more telling signal.
 - **A saturation/opportunity quadrant.** Volume against momentum: crowded and cooling in one
   corner, emerging and sparse in another.
 - **Every number is a button.** Any statistic opens a drawer with the actual papers behind it.
@@ -48,14 +48,14 @@ always shown decomposed so a reader can disagree with the weighting rather than 
 | --- | --- |
 | Corpus | ACL Anthology complete bulk export, supplemented with an OpenAlex sweep for journal and regional venues that never reach an ACL venue |
 | Filtering | Papers must touch a lower-resource or multilingual setting, and carry a usable abstract |
-| Tagging | Explicit gazetteer matched against title and abstract — no model inference, so every count is reproducible from source text |
+| Tagging | Explicit gazetteer matched against title and abstract, no model inference, so every count is reproducible from source text |
 | Resource tiers | Joshi et al. (ACL 2020), *The State and Fate of Linguistic Diversity and Inclusion in the NLP World* |
-| Retrieval | BM25 over title + abstract with taxonomy expansion — a query naming a concept is expanded to every surface form before scoring |
+| Retrieval | BM25 over title + abstract with taxonomy expansion, a query naming a concept is expanded to every surface form before scoring |
 | Themes | Log-odds ratio with an informative Dirichlet prior (Monroe et al. 2008) against the whole corpus |
 | Concentration | Herfindahl–Hirschman Index over named resources; 0.25 is the conventional "highly concentrated" threshold |
 
 Taxonomy expansion is what lets *"toxic language in Roman Urdu"* reach a paper titled *"Abusive
-content detection for code-mixed Urdu-English"* — a match plain keyword search misses entirely.
+content detection for code-mixed Urdu-English"*, a match plain keyword search misses entirely.
 Because the expansion table is explicit rather than learned, the interface can show the user
 precisely which concepts it understood.
 
@@ -116,7 +116,7 @@ scripts/
 src/lib/
   taxonomy.ts               languages (with tiers), tasks, methods, groups
   retrieval.ts              BM25 + taxonomy expansion
-  analysis.ts               the gap engine — facets, matrix, scoring, narrative
+  analysis.ts               the gap engine: facets, matrix, scoring, narrative
   engine.ts                 server-side singletons
   brief.ts                  Markdown export
 src/components/             the interface
@@ -125,5 +125,5 @@ src/components/             the interface
 ## Stack
 
 Next.js 16 · React 19 · TypeScript · Tailwind v4. No database, no model API, no runtime
-dependencies beyond the framework — the analysis is deterministic, which is what makes it
+dependencies beyond the framework: the analysis is deterministic, which is what makes it
 reproducible and auditable.

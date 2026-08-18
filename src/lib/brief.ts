@@ -24,8 +24,8 @@ export function renderBrief(l: Landscape): string {
 
   out.push(`# Research Gap Brief`);
   out.push(``);
-  out.push(`**Scope** — ${scopeLine}`);
-  out.push(`**Generated** — ${date} by Lacuna, over ${l.corpusSize.toLocaleString()} indexed papers`);
+  out.push(`**Scope**: ${scopeLine}`);
+  out.push(`**Generated**: ${date} by HERMÈS, over ${l.corpusSize.toLocaleString()} indexed papers`);
   out.push(``);
   out.push(`> ${l.narrative.headline}`);
   out.push(``);
@@ -45,7 +45,7 @@ export function renderBrief(l: Landscape): string {
   out.push(``);
   for (const t of l.themes) {
     out.push(
-      `- **${t.label}** — ${t.count} papers (${Math.round(t.share * 100)}% of cohort), ${t.trend}, ${t.momentum.toFixed(2)}× momentum. Distinctive terms: ${t.distinctiveTerms.join(", ") || "—"}.`,
+      `- **${t.label}**: ${t.count} papers (${Math.round(t.share * 100)}% of cohort), ${t.trend}, ${t.momentum.toFixed(2)}× momentum. Distinctive terms: ${t.distinctiveTerms.join(", ") || ", "}.`,
     );
   }
   out.push(``);
@@ -59,7 +59,7 @@ export function renderBrief(l: Landscape): string {
   for (const f of l.languageFacets.slice(0, 14)) {
     const tier = f.meta?.tier;
     out.push(
-      `| ${f.label} | ${tier !== undefined ? `T${tier} ${TIER_LABEL[tier as 0]}` : "—"} | ${f.count} | ${Math.round(f.share * 100)}% | ${f.momentum.toFixed(2)}× |`,
+      `| ${f.label} | ${tier !== undefined ? `T${tier} ${TIER_LABEL[tier as 0]}` : ", "} | ${f.count} | ${Math.round(f.share * 100)}% | ${f.momentum.toFixed(2)}× |`,
     );
   }
   out.push(``);
@@ -74,7 +74,7 @@ export function renderBrief(l: Landscape): string {
   out.push(``);
 
   if (l.datasetFacets.length) {
-    out.push(`**Most-reused resources** — ${l.datasetFacets.slice(0, 10).map((d) => `${d.label} (${d.count})`).join(", ")}`);
+    out.push(`**Most-reused resources**: ${l.datasetFacets.slice(0, 10).map((d) => `${d.label} (${d.count})`).join(", ")}`);
     out.push(``);
     out.push(`Dataset concentration (HHI): **${l.concentration.hhi.toFixed(2)}**. ${l.concentration.verdict}`);
     out.push(``);
@@ -91,7 +91,7 @@ export function renderBrief(l: Landscape): string {
     const name = (code: string) => l.matrix.languages.find((x) => x.code === code)?.name ?? code;
     const task = (id: string) => l.matrix.tasks.find((x) => x.id === id)?.name ?? id;
     for (const c of [...voids].sort((a, b) => b.peerCount - a.peerCount).slice(0, 16)) {
-      out.push(`- **${name(c.langCode)} × ${task(c.taskId)}** — 0 indexed papers; ${c.peerCount} in related languages.`);
+      out.push(`- **${name(c.langCode)} × ${task(c.taskId)}**: 0 indexed papers; ${c.peerCount} in related languages.`);
     }
   }
   out.push(``);
@@ -134,7 +134,7 @@ export function renderBrief(l: Landscape): string {
   out.push(`## Method and limitations`);
   out.push(``);
   out.push(
-    `Papers come from the ACL Anthology bulk export supplemented with OpenAlex records, filtered to work touching lower-resource or multilingual settings. Language, task, method and dataset tags are assigned by matching an explicit gazetteer against each title and abstract — no model inference — so every count here is reproducible from the source text.`,
+    `Papers come from the ACL Anthology bulk export supplemented with OpenAlex records, filtered to work touching lower-resource or multilingual settings. Language, task, method and dataset tags are assigned by matching an explicit gazetteer against each title and abstract, no model inference, so every count here is reproducible from the source text.`,
   );
   out.push(``);
   out.push(

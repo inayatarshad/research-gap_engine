@@ -11,7 +11,7 @@ export interface Preset {
   languages: string[];
   tasks: string[];
   blurb: string;
-  /** Rendered as the card's quiet subtitle — what this expedition tends to reveal. */
+  /** Rendered as the card's quiet subtitle: what this expedition tends to reveal. */
   expect: string;
 }
 
