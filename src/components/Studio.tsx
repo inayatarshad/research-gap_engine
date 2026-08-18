@@ -63,7 +63,20 @@ export function Studio({ meta, overview }: { meta: CorpusMeta; overview: Overvie
   const [elapsed, setElapsed] = useState<number | null>(null);
   const [evidence, setEvidence] = useState<EvidenceQuery | null>(null);
   const [active, setActive] = useState("reading");
+  const [scopeOpen, setScopeOpen] = useState(false);
   const resultsRef = useRef<HTMLDivElement>(null);
+
+  // Reaching the scope should never require finding it on screen.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setScopeOpen((v) => !v);
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
 
   const run = useCallback(async (s: Scope) => {
     setBusy(true);
@@ -130,25 +143,44 @@ export function Studio({ meta, overview }: { meta: CorpusMeta; overview: Overvie
 
   return (
     <>
-      <Header meta={meta} landscape={landscape} active={active} onReset={() => setLandscape(null)} />
+      <Header
+        meta={meta}
+        landscape={landscape}
+        active={active}
+        scope={scope}
+        scopeOpen={scopeOpen}
+        onToggleScope={() => setScopeOpen((v) => !v)}
+        onReset={() => {
+          setLandscape(null);
+          setScopeOpen(false);
+        }}
+      />
+
+      {/*
+        Once results exist the composer moves out of the document flow and
+        becomes a panel hung off the header. Left inline it occupied roughly
+        180px of permanent vertical space above every screen of content.
+      */}
+      {landscape && (
+        <ScopePanel open={scopeOpen} onClose={() => setScopeOpen(false)}>
+          <Composer
+            scope={scope}
+            setScope={setScope}
+            onRun={(s) => {
+              setScopeOpen(false);
+              run(s);
+            }}
+            busy={busy}
+          />
+        </ScopePanel>
+      )}
 
       <main className="wrap" style={{ paddingBottom: 100 }}>
         {!landscape && <HeroBlock overview={overview} />}
 
-        <div
-          style={{
-            position: "sticky",
-            top: landscape ? 56 : undefined,
-            zIndex: 30,
-            paddingTop: landscape ? 10 : 0,
-            paddingBottom: landscape ? 10 : 0,
-            background: landscape
-              ? "linear-gradient(to bottom, var(--ivory) 72%, transparent)"
-              : undefined,
-          }}
-        >
-          <Composer scope={scope} setScope={setScope} onRun={run} busy={busy} compact={!!landscape} />
-        </div>
+        {!landscape && (
+          <Composer scope={scope} setScope={setScope} onRun={run} busy={busy} />
+        )}
 
         {!landscape && !busy && <LandingBody overview={overview} onPick={runPreset} />}
 
@@ -189,11 +221,17 @@ function Header({
   meta,
   landscape,
   active,
+  scope,
+  scopeOpen,
+  onToggleScope,
   onReset,
 }: {
   meta: CorpusMeta;
   landscape: Landscape | null;
   active: string;
+  scope: Scope;
+  scopeOpen: boolean;
+  onToggleScope: () => void;
   onReset: () => void;
 }) {
   return (
@@ -243,14 +281,14 @@ function Header({
             <span className="display" style={{ fontSize: 23, letterSpacing: "-0.02em" }}>
               HERMÈS
             </span>
-            <span className="eyebrow" style={{ fontSize: 9 }}>
+            <span className="eyebrow brand-sub" style={{ fontSize: 9 }}>
               research gap engine
             </span>
           </span>
         </button>
 
         {landscape && (
-          <nav style={{ display: "flex", gap: 2, marginLeft: 8, overflowX: "auto" }} className="scroll-thin">
+          <nav style={{ display: "flex", gap: 2, marginLeft: 8, overflowX: "auto" }} className="scroll-thin section-nav">
             {SECTIONS.map((s) => (
               <a
                 key={s.id}
@@ -271,13 +309,153 @@ function Header({
           </nav>
         )}
 
-        <div style={{ flex: 1 }} />
+        <div style={{ flex: 1, minWidth: 8 }} />
 
-        <span className="mono" style={{ fontSize: 11, color: "var(--faint)", whiteSpace: "nowrap" }}>
-          {meta.paperCount.toLocaleString()} papers · {meta.languagesCovered} languages
-        </span>
+        {landscape ? (
+          <ScopePill scope={scope} landscape={landscape} open={scopeOpen} onClick={onToggleScope} />
+        ) : (
+          <span className="mono" style={{ fontSize: 11, color: "var(--faint)", whiteSpace: "nowrap" }}>
+            {meta.paperCount.toLocaleString()} papers · {meta.languagesCovered} languages
+          </span>
+        )}
       </div>
     </header>
+  );
+}
+
+/**
+ * The scope, reduced to one line. It reads as a control rather than a label:
+ * the current query, what constrains it, and how many papers that returned,
+ * with the full composer one click or one keystroke away.
+ */
+function ScopePill({
+  scope,
+  landscape,
+  open,
+  onClick,
+}: {
+  scope: Scope;
+  landscape: Landscape;
+  open: boolean;
+  onClick: () => void;
+}) {
+  const constraints = scope.languages.length + scope.tasks.length;
+  const label =
+    scope.query.trim() ||
+    [
+      ...scope.languages.map((l) => LANG_BY_CODE.get(l)?.name ?? l),
+      ...scope.tasks.map((t) => TASK_BY_ID.get(t)?.name ?? t),
+    ].join(", ") ||
+    "All papers";
+
+  return (
+    <button
+      onClick={onClick}
+      aria-expanded={open}
+      title="Edit scope (⌘K)"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 9,
+        maxWidth: "min(46vw, 430px)",
+        padding: "6px 8px 6px 13px",
+        borderRadius: 999,
+        border: `1px solid ${open ? "var(--ink)" : "var(--line-strong)"}`,
+        background: open ? "var(--champagne)" : "var(--paper)",
+        cursor: "pointer",
+        transition: "background .16s, border-color .16s",
+        flexShrink: 1,
+        minWidth: 0,
+      }}
+    >
+      <span
+        style={{
+          fontSize: 13,
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          minWidth: 0,
+        }}
+      >
+        {label}
+      </span>
+      {constraints > 0 && (
+        <span className="tag" style={{ fontSize: 10, flexShrink: 0 }}>
+          +{constraints}
+        </span>
+      )}
+      <span
+        className="mono"
+        style={{
+          fontSize: 11,
+          color: "var(--muted)",
+          background: "var(--ivory)",
+          border: "1px solid var(--line-soft)",
+          borderRadius: 999,
+          padding: "3px 9px",
+          whiteSpace: "nowrap",
+          flexShrink: 0,
+        }}
+      >
+        {landscape.cohortSize.toLocaleString()}
+      </span>
+      <span
+        aria-hidden
+        style={{
+          fontSize: 10,
+          color: "var(--faint)",
+          transform: open ? "rotate(180deg)" : "none",
+          transition: "transform .2s",
+          flexShrink: 0,
+        }}
+      >
+        ▾
+      </span>
+    </button>
+  );
+}
+
+/** Drops the composer out of the header without displacing the page. */
+function ScopePanel({
+  open,
+  onClose,
+  children,
+}: {
+  open: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}) {
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  return (
+    <>
+      <div
+        onClick={onClose}
+        className="fade"
+        style={{ position: "fixed", inset: "56px 0 0", background: "rgba(17,34,80,.16)", zIndex: 44 }}
+      />
+      <div
+        className="wrap"
+        style={{ position: "fixed", top: 56, left: 0, right: 0, zIndex: 45, paddingTop: 10 }}
+      >
+        <div
+          style={{
+            animation: "dropIn .24s cubic-bezier(.22,1,.36,1) both",
+            boxShadow: "var(--shadow-lg)",
+            borderRadius: "var(--radius)",
+          }}
+        >
+          {children}
+        </div>
+      </div>
+    </>
   );
 }
 

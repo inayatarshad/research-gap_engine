@@ -33,6 +33,14 @@ export function getIndex(): Index {
   return indexCache;
 }
 
+/**
+ * One limit for both the composer preview and the analysis. They used to
+ * differ (4000 vs 1200), so the composer advertised a larger figure than the
+ * results then reported, which undermines the point of every number being
+ * checkable.
+ */
+const COHORT_LIMIT = 1200;
+
 /* ------------------------------------------------------------------ */
 
 export const DEFAULT_SCOPE: Scope = {
@@ -58,7 +66,7 @@ export function normaliseScope(input: Partial<Scope>): Scope {
 /** Cheap count used by the composer's live "N papers in scope" readout. */
 export function previewCount(scope: Scope): { count: number; interpreted: string[] } {
   const parsed = parseQuery(scope.query);
-  const results = retrieve(getIndex(), parsed, scope, 4000);
+  const results = retrieve(getIndex(), parsed, scope, COHORT_LIMIT);
   return { count: trimTail(results, 20).length, interpreted: parsed.interpreted };
 }
 
@@ -66,7 +74,7 @@ export function runLandscape(scope: Scope): Landscape {
   const corpus = getCorpus();
   const index = getIndex();
   const parsed = parseQuery(scope.query);
-  const results = retrieve(index, parsed, scope, 1200);
+  const results = retrieve(index, parsed, scope, COHORT_LIMIT);
   const cohort = trimTail(results, 40);
 
   return analyse({
