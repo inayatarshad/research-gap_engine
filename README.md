@@ -1,8 +1,8 @@
-# HERMÈS, Research Gap & Discovery Engine
+# Lacuņa, Research Gap & Discovery Engine
 
 **Every field has a shape. The holes have one too.**
 
-HERMÈS maps what NLP research is studying and, more usefully, what it keeps skipping. It scores
+Lacuņa maps what NLP research is studying and, more usefully, what it keeps skipping. It scores
 under-researched language and task pairings, argues why each one is a real gap rather than a
 non-problem, and shows the papers behind every number it prints.
 
@@ -16,7 +16,7 @@ Finding a research gap is normally done by reading for months and noticing an ab
 but it does not scale and it cannot tell you whether the absence you found is a genuine opportunity
 or a subject nobody studies because it does not matter.
 
-HERMÈS makes that judgement explicit. For any language × task pairing it asks: *how little exists
+Lacuņa makes that judgement explicit. For any language × task pairing it asks: *how little exists
 here, how much exists in comparable languages, is the field moving on this, how many people speak
 it, and is there enough groundwork to start?* Those five terms produce a score, and the score is
 always shown decomposed so a reader can disagree with the weighting rather than the conclusion.

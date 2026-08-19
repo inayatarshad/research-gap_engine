@@ -25,7 +25,7 @@ export function renderBrief(l: Landscape): string {
   out.push(`# Research Gap Brief`);
   out.push(``);
   out.push(`**Scope**: ${scopeLine}`);
-  out.push(`**Generated**: ${date} by HERMÈS, over ${l.corpusSize.toLocaleString()} indexed papers`);
+  out.push(`**Generated**: ${date} by Lacuņa, over ${l.corpusSize.toLocaleString()} indexed papers`);
   out.push(``);
   out.push(`> ${l.narrative.headline}`);
   out.push(``);

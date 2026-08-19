@@ -3,7 +3,7 @@ import { getCorpus } from "@/lib/engine";
 import { getOverview } from "@/lib/overview";
 
 export const metadata = {
-  title: "Studio · HERMÈS",
+  title: "Studio · Lacuņa",
 };
 
 export default function StudioPage() {

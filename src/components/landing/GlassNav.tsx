@@ -4,22 +4,30 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const LINKS = [
-  { id: "what", label: "What it does" },
-  { id: "coverage", label: "Coverage" },
+  { id: "problem", label: "The problem" },
+  { id: "vision", label: "The vision" },
+  { id: "solves", label: "What it solves" },
+  { id: "how", label: "How it works" },
   { id: "architecture", label: "Architecture" },
 ];
 
 /**
- * Centred floating navigation. It sits over the page rather than in it, so the
- * hero keeps its full height, and it tightens on scroll so the mark stays
- * present without competing with the content underneath.
+ * Full-width glass bar. Deliberately transparent enough that the page keeps
+ * moving underneath it: the blur and a hairline carry the separation instead of
+ * an opaque fill, and it deepens slightly once the page has scrolled so the
+ * links stay readable over dense content.
  */
 export function GlassNav() {
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState<string>("");
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 30);
+      const max = document.body.scrollHeight - window.innerHeight;
+      setProgress(max > 0 ? Math.min(1, window.scrollY / max) : 0);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -43,50 +51,44 @@ export function GlassNav() {
   }, []);
 
   return (
-    <nav
+    <header
       style={{
         position: "fixed",
-        top: scrolled ? 12 : 20,
-        left: "50%",
-        transform: "translateX(-50%)",
+        top: 0,
+        left: 0,
+        right: 0,
         zIndex: 80,
-        transition: "top .35s cubic-bezier(.22,1,.36,1)",
-        maxWidth: "calc(100vw - 24px)",
+        background: scrolled ? "rgba(245,244,240,0.55)" : "rgba(245,244,240,0.22)",
+        backdropFilter: "blur(26px) saturate(180%)",
+        borderBottom: `1px solid ${scrolled ? "rgba(17,34,80,0.09)" : "rgba(17,34,80,0.04)"}`,
+        transition: "background .4s ease, border-color .4s ease",
       }}
     >
       <div
-        className="glass"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 6,
-          padding: scrolled ? "6px 6px 6px 12px" : "8px 8px 8px 14px",
-          borderRadius: 999,
-          transition: "padding .35s cubic-bezier(.22,1,.36,1)",
-        }}
+        className="wrap"
+        style={{ height: 62, display: "flex", alignItems: "center", gap: 16 }}
       >
         <Link
           href="/"
-          style={{ display: "flex", alignItems: "center", gap: 9, paddingRight: 6 }}
-          aria-label="HERMÈS"
+          style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}
+          aria-label="Lacuņa"
         >
           <img
             src="/logo.png"
             alt=""
-            width={30}
-            height={25}
-            style={{ height: 25, width: "auto", borderRadius: 6, display: "block" }}
+            width={31}
+            height={26}
+            style={{ height: 26, width: "auto", borderRadius: 6, display: "block" }}
           />
           <span
             className="display"
-            style={{ fontSize: 18, letterSpacing: "-0.01em", whiteSpace: "nowrap" }}
+            style={{ fontSize: 20, letterSpacing: "-0.01em", whiteSpace: "nowrap" }}
           >
-            HERMÈS
+            Lacuņa
           </span>
         </Link>
 
-        <span className="nav-links" style={{ display: "flex", gap: 2, alignItems: "center" }}>
-          <span style={{ width: 1, height: 20, background: "var(--line)", margin: "0 6px" }} />
+        <nav className="nav-links" style={{ display: "flex", gap: 2, alignItems: "center", marginLeft: 12 }}>
           {LINKS.map((l) => (
             <a
               key={l.id}
@@ -97,19 +99,21 @@ export function GlassNav() {
                 fontSize: 13,
                 whiteSpace: "nowrap",
                 color: active === l.id ? "var(--ink)" : "var(--muted)",
-                background: active === l.id ? "rgba(231,226,206,.85)" : "transparent",
+                background: active === l.id ? "rgba(231,226,206,.8)" : "transparent",
                 transition: "background .2s, color .2s",
               }}
             >
               {l.label}
             </a>
           ))}
-        </span>
+        </nav>
+
+        <div style={{ flex: 1, minWidth: 6 }} />
 
         <Link
           href="/studio"
           className="btn btn-primary"
-          style={{ marginLeft: 4, paddingLeft: 17, paddingRight: 15 }}
+          style={{ paddingLeft: 18, paddingRight: 16, flexShrink: 0 }}
         >
           Enter system
           <span aria-hidden style={{ opacity: 0.75 }}>
@@ -117,6 +121,16 @@ export function GlassNav() {
           </span>
         </Link>
       </div>
-    </nav>
+
+      {/* Reading progress, doubling as the bar's only solid edge. */}
+      <div
+        style={{
+          height: 2,
+          width: `${progress * 100}%`,
+          background: "linear-gradient(90deg, var(--sapphire), var(--copper))",
+          transition: "width .1s linear",
+        }}
+      />
+    </header>
   );
 }

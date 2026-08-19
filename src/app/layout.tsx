@@ -29,18 +29,18 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HERMÈS, Research Gap & Discovery Engine",
+  title: "Lacuņa, Research Gap & Discovery Engine",
   description:
-    "HERMÈS maps what a research field is studying and what it keeps skipping. It analyses 16,605 NLP papers to score under-researched language and task pairings, with the evidence behind every number.",
+    "Lacuņa maps what a research field is studying and what it keeps skipping. It analyses 16,605 NLP papers to score under-researched language and task pairings, with the evidence behind every number.",
   openGraph: {
-    title: "HERMÈS, Research Gap & Discovery Engine",
+    title: "Lacuņa, Research Gap & Discovery Engine",
     description: "Map what a research field is studying, and what it keeps skipping.",
     type: "website",
-    images: [{ url: "/logo.png", width: 211, height: 173, alt: "HERMÈS" }],
+    images: [{ url: "/logo.png", width: 211, height: 173, alt: "Lacuņa" }],
   },
   twitter: {
     card: "summary",
-    title: "HERMÈS, Research Gap & Discovery Engine",
+    title: "Lacuņa, Research Gap & Discovery Engine",
     description: "Map what a research field is studying, and what it keeps skipping.",
     images: ["/logo.png"],
   },

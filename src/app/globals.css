@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ==================================================================
-   HERMÈS: design tokens
+   Lacuņa: design tokens
    Palette is the supplied navy/sapphire/taupe/champagne/ivory set,
    kept deliberately light. Two functional accents are derived from it:
    copper for opportunity, sage for saturation.
@@ -652,4 +652,37 @@ a {
 
 @media (max-width: 560px) {
   .arch-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---------------- landing: seven section grids ---------------- */
+
+.fact-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.prob-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+}
+
+.principle-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@media (max-width: 1080px) {
+  .principle-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 900px) {
+  .fact-grid { grid-template-columns: minmax(0, 1fr); }
+  .prob-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 620px) {
+  .principle-grid { grid-template-columns: minmax(0, 1fr); }
 }

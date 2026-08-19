@@ -251,7 +251,7 @@ function Header({
       >
         <button
           onClick={onReset}
-          aria-label="HERMÈS: back to start"
+          aria-label="Lacuņa: back to start"
           style={{
             background: "none",
             border: "none",
@@ -279,7 +279,7 @@ function Header({
           />
           <span style={{ display: "flex", alignItems: "baseline", gap: 9 }}>
             <span className="display" style={{ fontSize: 23, letterSpacing: "-0.02em" }}>
-              HERMÈS
+              Lacuņa
             </span>
             <span className="eyebrow brand-sub" style={{ fontSize: 9 }}>
               research gap engine
