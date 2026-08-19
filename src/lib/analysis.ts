@@ -531,6 +531,7 @@ export interface AnalyseInput {
   inferredLanguages: string[];
   inferredTasks: string[];
   corpusFreq: Map<string, number>;
+  relaxation: Landscape["relaxation"];
 }
 
 export function analyse(input: AnalyseInput): Landscape {
@@ -953,6 +954,23 @@ export function analyse(input: AnalyseInput): Landscape {
     quadrant,
   });
 
+  // When the scope had to be widened, the absence is the story. Say it first,
+  // in the user's own terms, before any of the derived statistics.
+  if (input.relaxation.applied) {
+    const asked = [
+      ...focusLangs.map((c) => LANG_BY_CODE.get(c)?.name ?? c),
+      ...focusTasks.map((t) => TASK_BY_ID.get(t)?.name ?? t),
+    ];
+    const subject = asked.length ? asked.join(" and ") : `“${scope.query.trim()}”`;
+    narrative.headline =
+      input.relaxation.exactCount === 0
+        ? `Nothing in the index matches ${subject}`
+        : `Only ${input.relaxation.exactCount} indexed ${input.relaxation.exactCount === 1 ? "paper matches" : "papers match"} ${subject}`;
+    narrative.paragraphs.unshift(
+      `${input.relaxation.exactCount === 0 ? "No indexed paper covers" : `Only ${input.relaxation.exactCount} indexed papers cover`} exactly what you asked for, which is the finding rather than a failed search. To give you something to work from, the engine ${input.relaxation.note} and analysed the nearest evidence instead. Everything below describes that wider set, while the ranked gaps stay centred on your original question.`,
+    );
+  }
+
   return {
     scope,
     resolved: {
@@ -983,6 +1001,7 @@ export function analyse(input: AnalyseInput): Landscape {
     quadrant,
     concentration,
     methodLag,
+    relaxation: input.relaxation,
     reliability,
     narrative,
     equity,

@@ -226,6 +226,7 @@ export function retrieve(
     }
   }
 
+  const hasTerms = parsed.terms.size > 0;
   const wantLangs = new Set([...parsed.languages, ...scope.languages]);
   const wantTasks = new Set([...parsed.tasks, ...scope.tasks]);
   const hardLangs = new Set(scope.languages);
@@ -240,7 +241,11 @@ export function retrieve(
     if (hardLangs.size && !p.languages.some((l) => hardLangs.has(l))) continue;
     if (hardTasks.size && !p.tasks.some((t) => hardTasks.has(t))) continue;
 
-    let s = scores[i];
+    // With no free text there are no BM25 terms, so every score is zero and the
+    // cut below would discard the whole corpus. A scope built purely from
+    // filters is a legitimate way to browse, so give those papers a flat
+    // baseline and let the structural bonuses and priors do the ordering.
+    let s = hasTerms ? scores[i] : 1;
 
     // Structural bonuses: tagged concepts beat incidental word overlap.
     if (wantLangs.size && p.languages.some((l) => wantLangs.has(l))) s *= 1.85;

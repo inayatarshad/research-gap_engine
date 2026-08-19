@@ -215,6 +215,18 @@ export interface Landscape {
    * cannot support a confident claim about a field, and the interface should
    * say so rather than render the same assured layout over noise.
    */
+  /**
+   * Set when the exact scope returned too little and the engine widened it.
+   * An empty exact match is a finding rather than an error, so the interface
+   * leads with the absence and states what it released to find nearby work.
+   */
+  relaxation: {
+    applied: boolean;
+    note: string | null;
+    dropped: string[];
+    /** How many papers the untouched scope actually returned. */
+    exactCount: number;
+  };
   reliability: {
     level: "thin" | "moderate" | "good";
     note: string;

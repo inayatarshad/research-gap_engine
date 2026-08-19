@@ -524,12 +524,14 @@ function Results({
   const focusGaps = l.gaps.filter((g) => g.focus);
   const adjacentGaps = l.gaps.filter((g) => !g.focus);
 
+  // No dead end: the widening ladder in the engine guarantees a cohort, so the
+  // only case left here is a corpus that failed to load at all.
   if (l.cohortSize === 0) {
     return (
       <div style={{ marginTop: 40 }}>
         <Empty
-          title="No papers matched this scope"
-          hint="Usually a scoping artefact rather than a finding, widen the years, drop a filter, or describe the area differently."
+          title="The index did not respond"
+          hint="This is a system fault rather than a result. Reload, and if it persists the corpus file failed to load on the server."
         />
       </div>
     );
@@ -543,6 +545,51 @@ function Results({
         title={l.narrative.headline}
         aside={<BriefButton landscape={l} />}
       >
+        {l.relaxation.applied && (
+          <div
+            className="card"
+            style={{
+              marginBottom: 16,
+              padding: "16px 18px",
+              background: "var(--copper-soft)",
+              borderColor: "rgba(162,102,47,.4)",
+              display: "flex",
+              gap: 13,
+              alignItems: "flex-start",
+            }}
+          >
+            <span
+              aria-hidden
+              style={{
+                width: 26,
+                height: 26,
+                borderRadius: 8,
+                background: "var(--copper)",
+                color: "#fff",
+                display: "grid",
+                placeItems: "center",
+                fontSize: 14,
+                flexShrink: 0,
+              }}
+            >
+              ◎
+            </span>
+            <div>
+              <div className="eyebrow" style={{ color: "var(--copper)", marginBottom: 4 }}>
+                {l.relaxation.exactCount === 0 ? "An empty pairing is the finding" : "Very thin pairing"}
+              </div>
+              <div style={{ fontSize: 14, lineHeight: 1.6 }}>
+                Your exact scope returned{" "}
+                <strong style={{ fontWeight: 600 }}>
+                  {l.relaxation.exactCount === 0 ? "no papers" : `${l.relaxation.exactCount} papers`}
+                </strong>
+                . Rather than stop there, the engine {l.relaxation.note} so you can see the nearest
+                evidence. The ranked gaps below still centre on what you originally asked.
+              </div>
+            </div>
+          </div>
+        )}
+
         {l.reliability.level !== "good" && (
           <div
             className="card"
