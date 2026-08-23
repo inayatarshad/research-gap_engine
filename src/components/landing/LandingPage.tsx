@@ -10,7 +10,7 @@ import { Architecture } from "./Architecture";
 import { Carousel } from "./Carousel";
 import { GlassNav } from "./GlassNav";
 import { KineticLine, Rotator, ScrollWords } from "./Kinetic";
-import { Orbit } from "./Orbit";
+import { Constellation } from "./Constellation";
 
 /**
  * Seven sections, in the order an unconvinced reader needs them:
@@ -55,7 +55,8 @@ function Hero({ overview }: { overview: Overview }) {
         style={{ width: 400, height: 400, right: "-4%", top: 40, background: "#ecdcc4", animation: "drift 26s ease-in-out infinite reverse" }}
       />
 
-      <div className="wrap" style={{ position: "relative", paddingTop: "clamp(126px, 15vw, 176px)" }}>
+      <div className="wrap hero-grid" style={{ position: "relative", paddingTop: "clamp(120px, 13vw, 158px)" }}>
+        <div>
         <div
           className="eyebrow"
           style={{ display: "flex", gap: 9, alignItems: "center", marginBottom: 20, animation: "fade .8s ease .5s both" }}
@@ -100,9 +101,49 @@ function Hero({ overview }: { overview: Overview }) {
           </a>
         </div>
 
-        <Orbit overview={overview} />
+        <HeroMetrics overview={overview} />
+        </div>
+
+        <div className="hero-figure">
+          <Constellation overview={overview} />
+        </div>
       </div>
     </section>
+  );
+}
+
+/** Compact headline figures under the hero copy. */
+function HeroMetrics({ overview }: { overview: Overview }) {
+  const [ref, seen] = useInView<HTMLDivElement>("-20px");
+  const items = [
+    { v: overview.papers, s: "", l: "papers indexed" },
+    { v: overview.languages, s: "", l: "languages tagged" },
+    { v: overview.highResourceShare * 100, s: "%", l: "study English or peers only", accent: true },
+  ];
+  return (
+    <div
+      ref={ref}
+      className="hairline"
+      style={{ display: "flex", gap: "clamp(22px, 4vw, 46px)", marginTop: 38, paddingTop: 22, flexWrap: "wrap" }}
+    >
+      {items.map((m, i) => (
+        <div key={m.l}>
+          <div
+            className="display"
+            style={{
+              fontSize: "clamp(26px, 3vw, 36px)",
+              lineHeight: 1,
+              fontWeight: 400,
+              color: m.accent ? "var(--copper)" : "var(--ink)",
+              marginBottom: 6,
+            }}
+          >
+            <Counter value={m.v} active={seen} suffix={m.s} delay={i * 110} />
+          </div>
+          <div className="eyebrow" style={{ fontSize: 9, maxWidth: 132, lineHeight: 1.4 }}>{m.l}</div>
+        </div>
+      ))}
+    </div>
   );
 }
 

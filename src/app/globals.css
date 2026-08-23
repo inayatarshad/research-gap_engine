@@ -686,3 +686,36 @@ a {
 @media (max-width: 620px) {
   .principle-grid { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* ---------------- hero: copy left, figure right ---------------- */
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: center;
+}
+
+.hero-figure {
+  position: relative;
+}
+
+@media (max-width: 1040px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr); }
+  /* A grid item does not centre from auto margins, so place it explicitly. */
+  .hero-figure {
+    width: 100%;
+    max-width: 520px;
+    justify-self: center;
+    margin-top: 10px;
+  }
+}
+
+@keyframes spinSlow {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes voidPulse {
+  0%, 100% { stroke-opacity: .06; transform: scale(1); }
+  50% { stroke-opacity: .16; transform: scale(1.045); }
+}

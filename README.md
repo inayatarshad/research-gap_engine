@@ -1,4 +1,4 @@
-# Lacuņa, Research Gap & Discovery Engine
+# Lacuņa
 
 **Every field has a shape. The holes have one too.**
 
@@ -6,58 +6,73 @@ Lacuņa maps what NLP research is studying and, more usefully, what it keeps ski
 under-researched language and task pairings, argues why each one is a real gap rather than a
 non-problem, and shows the papers behind every number it prints.
 
-Built over **16,605 papers** spanning **73 languages**, **26 tasks** and **2008–2026**.
+Built over **16,605 papers**, **73 languages**, **26 tasks** and **1,722 venues**, spanning
+2008 to 2026.
+
+> A *lacuna* is a gap in a manuscript, the place where the text is missing.
 
 ---
 
-## Why this exists
+## The problem
 
-Finding a research gap is normally done by reading for months and noticing an absence. That works,
-but it does not scale and it cannot tell you whether the absence you found is a genuine opportunity
-or a subject nobody studies because it does not matter.
+Finding a research gap normally means reading for months and noticing an absence. Three things go
+wrong with that.
 
-Lacuņa makes that judgement explicit. For any language × task pairing it asks: *how little exists
-here, how much exists in comparable languages, is the field moving on this, how many people speak
-it, and is there enough groundwork to start?* Those five terms produce a score, and the score is
-always shown decomposed so a reader can disagree with the weighting rather than the conclusion.
+1. **It does not scale.** A literature review is bounded by how much one person can read.
+2. **An absence is ambiguous.** Nothing published on a topic can mean it is untouched, or that it
+   is a non-problem. Reading alone cannot separate the two.
+3. **The bias is invisible from inside.** If your field studies English, the shape of what it skips
+   never appears in the papers you read, only in the ones nobody wrote.
 
-## What makes it more than a search box
+The corpus bears this out. **48%** of papers carrying a language tag never leave the highest
+resource tier. Saraiki has roughly **13 million speakers for every indexed paper** written about
+it, against **3,576** for English.
+
+## What it does
+
+For any language and task pairing it asks five questions: how little exists here, how much exists
+in comparable languages, whether the field is moving on this, how many people speak it, and whether
+there is enough groundwork to start. Those terms produce a score out of 100, always shown decomposed
+so a reader can disagree with the weighting rather than the conclusion.
 
 - **A coverage matrix where the voids are the point.** Empty cells are hatched in copper, not left
-  blank: a blank cell in a heatmap reads as "no data" when here it means "no research". Hover an
-  empty cell and it tells you how many related languages have solved the same task: the adjacency
+  blank: a blank cell in a heatmap reads as "no data" when here it means "no research". Hovering an
+  empty cell reports how many related languages have solved the same task, which is the adjacency
   argument that separates a real gap from a non-problem.
 - **Peer evidence weighted by transfer plausibility.** Shared script counts for more than shared
-  family, because "Indo-European" is far too coarse to justify a claim that methods transfer from
+  family, because "Indo-European" is far too coarse to justify a claim that a method transfers from
   Polish to Urdu.
 - **Dataset concentration (HHI).** When most results in an area come from one corpus, published
-  performance describes that corpus as much as it describes the language. If most papers name no
-  resource at all, it says that instead, the more telling signal.
-- **A saturation/opportunity quadrant.** Volume against momentum: crowded and cooling in one
+  performance describes that corpus as much as it describes the language. When most papers name no
+  resource at all, it says that instead, which is the more telling signal.
+- **A saturation and opportunity quadrant.** Volume against momentum: crowded and cooling in one
   corner, emerging and sparse in another.
-- **Every number is a button.** Any statistic opens a drawer with the actual papers behind it.
-  This is the credibility contract: a claim that cannot be resolved to records does not get made.
-- **An honest reliability guard.** A cohort too small to characterise a field says so, in the
-  interface, above the analysis.
-- **Exportable brief.** A full Markdown research brief, including method and limitations.
-- **Shareable URLs.** Every analysis has a link that reopens it exactly.
+- **Every number is a button.** Any statistic opens a drawer with the actual papers behind it. A
+  claim that cannot be resolved to records does not get made.
+- **No dead ends.** An exact scope that matches nothing is reported as the finding it is. The engine
+  widens along a fallback ladder to show the nearest evidence while the ranked gaps stay centred on
+  the original question.
+- **An honest reliability guard.** A cohort too small to characterise a field says so, above the
+  analysis rather than in a footnote.
+- **Exportable brief and shareable links.** Every run produces a Markdown research brief including
+  method and limitations, and a URL that reopens the exact analysis.
 
 ## Method
 
 | Stage | Approach |
 | --- | --- |
 | Corpus | ACL Anthology complete bulk export, supplemented with an OpenAlex sweep for journal and regional venues that never reach an ACL venue |
-| Filtering | Papers must touch a lower-resource or multilingual setting, and carry a usable abstract |
+| Filtering | Papers must touch a lower-resource or multilingual setting and carry a usable abstract |
 | Tagging | Explicit gazetteer matched against title and abstract, no model inference, so every count is reproducible from source text |
 | Resource tiers | Joshi et al. (ACL 2020), *The State and Fate of Linguistic Diversity and Inclusion in the NLP World* |
-| Retrieval | BM25 over title + abstract with taxonomy expansion, a query naming a concept is expanded to every surface form before scoring |
+| Retrieval | BM25 over title and abstract with taxonomy expansion, where a query naming a concept is expanded to every surface form before scoring |
 | Themes | Log-odds ratio with an informative Dirichlet prior (Monroe et al. 2008) against the whole corpus |
-| Concentration | Herfindahl–Hirschman Index over named resources; 0.25 is the conventional "highly concentrated" threshold |
+| Concentration | Herfindahl-Hirschman Index over named resources, where 0.25 is the conventional "highly concentrated" threshold |
 
 Taxonomy expansion is what lets *"toxic language in Roman Urdu"* reach a paper titled *"Abusive
 content detection for code-mixed Urdu-English"*, a match plain keyword search misses entirely.
-Because the expansion table is explicit rather than learned, the interface can show the user
-precisely which concepts it understood.
+Because the expansion table is explicit rather than learned, the interface can show precisely which
+concepts it understood.
 
 ### Limitations, stated plainly
 
@@ -79,7 +94,11 @@ The corpus ships in `data/corpus.json`, so the app runs immediately:
 npm run dev
 ```
 
-To rebuild the corpus from source (downloads ~42 MB from the ACL Anthology, takes a few minutes):
+- `/` is the landing page: what the system is, the problem, the vision, and how it works.
+- `/studio` is the system itself.
+
+To rebuild the corpus from source (downloads about 42 MB from the ACL Anthology, takes a few
+minutes):
 
 ```bash
 npm run build:corpus
@@ -93,41 +112,51 @@ npm run smoke -- "Urdu NLP"
 
 ## Deploying
 
-The app is a standard Next.js App Router project and deploys to Vercel unchanged. The corpus is read
-from disk at runtime and traced into the serverless bundle via `outputFileTracingIncludes`, so no
-database or environment variable is required.
+A standard Next.js App Router project that deploys to Vercel unchanged. The corpus is read from disk
+at runtime and traced into the serverless bundle via `outputFileTracingIncludes`, so there is no
+database and no environment variable to set.
 
 ```bash
 npx vercel deploy --prod
 ```
 
-Cold start is ~3 s while the 23 MB corpus is parsed and the inverted index is built; subsequent
-requests on a warm instance return in ~250 ms.
-
-Runtime footprint is ~410 MB RSS (175 MB for the parsed corpus, the rest for the inverted index
-over 57,722 distinct terms). Both are process-wide singletons, and Fluid Compute reuses instances
-across concurrent requests, so that cost is paid once per instance rather than once per request.
+Cold start is about 3 s while the corpus is parsed and the inverted index is built. Warm requests
+return in roughly 250 ms. The runtime footprint is about 410 MB RSS, 175 MB of it the parsed corpus
+and the rest an inverted index over 57,722 distinct terms. Both are process-wide singletons, and
+Fluid Compute reuses instances across concurrent requests, so that cost is paid once per instance
+rather than once per request.
 
 ## Architecture
 
 ```
-data/corpus.json            16,605 enriched papers (generated, committed)
+data/corpus.json              16,605 enriched papers (generated, committed)
+
 scripts/
-  build-corpus.mjs          ACL Anthology + OpenAlex -> enriched corpus
-  ingest.mjs                OpenAlex sweep (supplementary source)
-  lib/enrich.mjs            shared gazetteer matching
-  smoke.ts                  engine harness, no Next required
+  build-corpus.mjs            ACL Anthology + OpenAlex -> enriched corpus
+  ingest.mjs                  OpenAlex sweep (supplementary source)
+  lib/enrich.mjs              shared gazetteer matching
+  smoke.ts                    engine harness, no Next required
+
 src/lib/
-  taxonomy.ts               languages (with tiers), tasks, methods, groups
-  retrieval.ts              BM25 + taxonomy expansion
-  analysis.ts               the gap engine: facets, matrix, scoring, narrative
-  engine.ts                 server-side singletons
-  brief.ts                  Markdown export
-src/components/             the interface
+  taxonomy.ts                 languages with resource tiers, tasks, methods, language groups
+  retrieval.ts                BM25 with taxonomy expansion
+  analysis.ts                 the gap engine: facets, matrix, scoring, narrative
+  engine.ts                   server-side singletons and the widening ladder
+  overview.ts                 corpus figures for the landing page
+  brief.ts                    Markdown export
+
+src/components/
+  landing/                    landing page: glass nav, kinetic type, constellation,
+                              carousel, architecture diagram
+  Studio.tsx                  the system: scope, results, evidence drawer
 ```
+
+Papers are never sent to the client. The 23 MB corpus stays server-side behind three routes:
+`/api/landscape` for a full analysis, `/api/preview` for the live scope counter, and `/api/evidence`
+for resolving any statistic back to its papers.
 
 ## Stack
 
-Next.js 16 · React 19 · TypeScript · Tailwind v4. No database, no model API, no runtime
-dependencies beyond the framework: the analysis is deterministic, which is what makes it
-reproducible and auditable.
+Next.js 16, React 19, TypeScript, Tailwind v4. No database, no model API, no runtime dependency
+beyond the framework. The analysis is deterministic, which is what makes it reproducible and
+auditable.
