@@ -738,3 +738,20 @@ a {
     font-size: 12.5px;
   }
 }
+
+/* ---------------- the corpus orb ----------------
+   Slow, offset drifts so the colour fields inside the orb never settle into a
+   fixed pattern. Kept small: it should read as breathing, not as spinning. */
+
+@keyframes orbA {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(9px, -7px) scale(1.06); }
+}
+@keyframes orbB {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-11px, 8px) scale(0.94); }
+}
+@keyframes orbC {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(7px, 10px) scale(1.05); }
+}

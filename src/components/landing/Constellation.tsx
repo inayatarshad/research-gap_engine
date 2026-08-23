@@ -22,6 +22,8 @@ const W = 520;
 const H = 500;
 const CX = W / 2;
 const CY = H / 2;
+/** The corpus itself, drawn as a body the languages orbit. */
+const ORB_R = 74;
 
 interface Body extends GraphLanguage {
   x: number;
@@ -104,8 +106,9 @@ function step(bodies: Body[], edges: Edge[], held: number | null) {
     const b = bodies[i];
     if (i === held) continue;
 
-    // Coverage pulls inward: the more studied, the tighter to the core.
-    const targetR = 34 + b.scarcity * 196;
+    // Coverage pulls inward, but never inside the core itself. The languages
+    // ring the orb and radiate outward as their coverage thins.
+    const targetR = ORB_R + 26 + b.scarcity * 126;
     const dx = b.x - CX;
     const dy = b.y - CY;
     const d = Math.hypot(dx, dy) || 1;
@@ -328,9 +331,106 @@ export function Constellation({ overview }: { overview: Overview }) {
             <filter id="soften" x="-40%" y="-40%" width="180%" height="180%">
               <feGaussianBlur stdDeviation="7" />
             </filter>
+
+            {/*
+              The corpus, as a single body. Several wide colour fields are
+              clipped to a circle and then blurred as a whole, which is what
+              gives the feathered edge and the iridescent bleed rather than a
+              flat filled disc.
+            */}
+            <clipPath id="orbClip">
+              <circle cx={CX} cy={CY} r={ORB_R} />
+            </clipPath>
+            <filter id="orbBlur" x="-45%" y="-45%" width="190%" height="190%">
+              <feGaussianBlur stdDeviation="17" />
+            </filter>
+            <filter id="orbHalo" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="26" />
+            </filter>
           </defs>
 
           <ellipse cx={CX} cy={CY} rx={168} ry={158} fill="url(#coreHalo)" />
+
+          {/* outer bloom */}
+          <circle
+            cx={CX}
+            cy={CY}
+            r={ORB_R * 1.08}
+            fill="#3b507d"
+            opacity={0.14}
+            filter="url(#orbHalo)"
+          />
+
+          {/* the orb */}
+          <g filter="url(#orbBlur)" opacity={ready ? 1 : 0} style={{ transition: "opacity 1.1s ease" }}>
+            <g clipPath="url(#orbClip)">
+              <circle cx={CX} cy={CY} r={ORB_R} fill="#eef0f4" />
+              <ellipse
+                cx={CX - 16}
+                cy={CY - 12}
+                rx={64}
+                ry={72}
+                fill="#1b2b57"
+                opacity={0.92}
+                style={{ animation: "orbA 15s ease-in-out infinite", transformOrigin: `${CX}px ${CY}px` }}
+              />
+              <ellipse
+                cx={CX + 46}
+                cy={CY - 34}
+                rx={40}
+                ry={44}
+                fill="#7f9bb8"
+                opacity={0.75}
+                style={{ animation: "orbB 19s ease-in-out infinite", transformOrigin: `${CX}px ${CY}px` }}
+              />
+              <ellipse
+                cx={CX - 30}
+                cy={CY + 44}
+                rx={52}
+                ry={38}
+                fill="#d8c58a"
+                opacity={0.8}
+                style={{ animation: "orbC 17s ease-in-out infinite", transformOrigin: `${CX}px ${CY}px` }}
+              />
+              <ellipse
+                cx={CX + 34}
+                cy={CY + 40}
+                rx={34}
+                ry={40}
+                fill="#a2662f"
+                opacity={0.6}
+                style={{ animation: "orbB 21s ease-in-out infinite reverse", transformOrigin: `${CX}px ${CY}px` }}
+              />
+              <ellipse
+                cx={CX - 52}
+                cy={CY + 8}
+                rx={30}
+                ry={46}
+                fill="#8fb5a8"
+                opacity={0.55}
+                style={{ animation: "orbC 23s ease-in-out infinite reverse", transformOrigin: `${CX}px ${CY}px` }}
+              />
+            </g>
+          </g>
+
+          {/* the thin chromatic rim the reference has */}
+          <circle
+            cx={CX}
+            cy={CY}
+            r={ORB_R}
+            fill="none"
+            stroke="url(#rimGrad)"
+            strokeWidth={1.1}
+            opacity={ready ? 0.5 : 0}
+            style={{ transition: "opacity 1.2s ease .3s" }}
+          />
+          <defs>
+            <linearGradient id="rimGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#d8c58a" />
+              <stop offset="45%" stopColor="#8fb5a8" />
+              <stop offset="100%" stopColor="#a2662f" />
+            </linearGradient>
+          </defs>
 
           {/* filaments */}
           <g>
