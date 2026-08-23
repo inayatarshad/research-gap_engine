@@ -70,7 +70,7 @@ function Hero({ overview }: { overview: Overview }) {
 
         <h1
           className="display"
-          style={{ fontSize: "clamp(38px, 6.4vw, 82px)", margin: 0, maxWidth: 1000, fontWeight: 300 }}
+          style={{ fontSize: "clamp(29px, 3.9vw, 55px)", margin: 0, fontWeight: 300, whiteSpace: "nowrap" }}
         >
           <KineticLine text="Every field has a shape." delay={0.1} />
           <br />

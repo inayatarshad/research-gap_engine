@@ -88,7 +88,7 @@ export function GlassNav() {
             style={{ height: 26, width: "auto", borderRadius: 6, display: "block" }}
           />
           <span
-            className="display"
+            className="display brand-word"
             style={{ fontSize: 20, letterSpacing: "-0.01em", whiteSpace: "nowrap" }}
           >
             Lacuņa

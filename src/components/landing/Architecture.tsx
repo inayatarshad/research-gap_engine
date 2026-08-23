@@ -63,7 +63,7 @@ export function Architecture() {
   }, [seen]);
 
   return (
-    <div ref={ref} style={{ position: "relative" }}>
+    <div ref={ref} style={{ position: "relative", overflow: "hidden", borderRadius: 18 }}>
       <div
         className="blob"
         style={{ width: 380, height: 380, left: "18%", top: -40, background: "#ccd5ea", animation: "drift 19s ease-in-out infinite" }}

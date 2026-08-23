@@ -20,6 +20,8 @@ export interface OverviewLanguage {
   speakersM: number;
   /** Millions of speakers carried per indexed paper. */
   ratio: number;
+  /** The task this language is most often studied for, if any. */
+  topTask: string | null;
 }
 
 export interface OverviewMatrix {
@@ -28,6 +30,16 @@ export interface OverviewMatrix {
   /** Row-major counts, languages x tasks. */
   cells: number[][];
   scale: number;
+}
+
+export interface GraphLanguage {
+  code: string;
+  name: string;
+  tier: ResourceTier;
+  papers: number;
+  family: string;
+  script: string;
+  topTask: string | null;
 }
 
 export interface Overview {
@@ -46,6 +58,8 @@ export interface Overview {
   yearCurve: { year: number; count: number }[];
   voids: number;
   totalCells: number;
+  /** Every tagged language, for the hero graph. */
+  graph: GraphLanguage[];
 }
 
 /** Rows chosen to make the coverage gradient legible in a single glance. */
@@ -93,6 +107,17 @@ export function getOverview(): Overview {
     const l = LANG_BY_CODE.get(code);
     if (!l) return null;
     const n = langCounts.get(code) ?? 0;
+    // The task this language is most often paired with, read straight off the
+    // pair counts so the label is the real dominant subject, not a guess.
+    let topTask: string | null = null;
+    let best = 0;
+    for (const [key, count] of pairCounts) {
+      if (!key.startsWith(code + "|")) continue;
+      if (count > best) {
+        best = count;
+        topTask = TASK_BY_ID.get(key.slice(code.length + 1))?.name ?? null;
+      }
+    }
     return {
       code,
       name: l.name,
@@ -100,6 +125,7 @@ export function getOverview(): Overview {
       papers: n,
       speakersM: l.speakersM,
       ratio: l.speakersM / Math.max(1, n),
+      topTask,
     };
   };
 
@@ -155,6 +181,23 @@ export function getOverview(): Overview {
     yearCurve,
     voids: flat.filter((n) => n === 0).length,
     totalCells: flat.length,
+    graph: [...langCounts.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 72)
+      .map(([code, n]) => {
+        const l = LANG_BY_CODE.get(code);
+        if (!l) return null;
+        return {
+          code,
+          name: l.name,
+          tier: l.tier,
+          papers: n,
+          family: l.family,
+          script: l.script,
+          topTask: toLang(code)?.topTask ?? null,
+        } satisfies GraphLanguage;
+      })
+      .filter((x): x is GraphLanguage => Boolean(x)),
   };
   return cache;
 }
