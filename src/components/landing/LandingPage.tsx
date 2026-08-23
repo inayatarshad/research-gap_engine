@@ -9,7 +9,7 @@ import { Counter, Reveal, useInView } from "../motion";
 import { Architecture } from "./Architecture";
 import { Carousel } from "./Carousel";
 import { GlassNav } from "./GlassNav";
-import { KineticLine, Rotator } from "./Kinetic";
+import { KineticLine, Rotator, ScrollWords } from "./Kinetic";
 import { Orbit } from "./Orbit";
 
 /**
@@ -27,6 +27,7 @@ export function LandingPage({ overview }: { overview: Overview }) {
 
         <div className="wrap" style={{ display: "grid", gap: "clamp(72px, 9vw, 116px)" }}>
           <Problem overview={overview} />
+          <Statement />
           <Vision />
           <Solves overview={overview} />
           <How overview={overview} />
@@ -233,6 +234,22 @@ function Inequality({ overview }: { overview: Overview }) {
         English holds {overview.topLanguages[0]?.papers.toLocaleString()} papers in the same corpus.
       </p>
     </div>
+  );
+}
+
+/**
+ * A single line written word by word as the reader scrolls through it. This is
+ * the one place on the page where the typography is driven by scroll position
+ * rather than by a timer.
+ */
+function Statement() {
+  return (
+    <section aria-label="Thesis" style={{ padding: "clamp(20px, 4vw, 56px) 0" }}>
+      <ScrollWords
+        text="A field records what it studied. It never records what it skipped, so the absence has to be measured instead of read."
+        accentFrom={9}
+      />
+    </section>
   );
 }
 
@@ -472,7 +489,7 @@ function Start() {
           <div style={{ position: "relative" }}>
             <div className="eyebrow" style={{ marginBottom: 12 }}>06 · Start</div>
             <h2 className="display" style={{ fontSize: "clamp(27px, 3.8vw, 44px)", margin: "0 0 14px", fontWeight: 300, maxWidth: 640 }}>
-              Pick a starting point, or bring your own question.
+              <KineticLine text="Pick a starting point, or bring your own question." step={0.042} />
             </h2>
             <p style={{ margin: "0 0 26px", fontSize: 15.5, color: "var(--muted)", maxWidth: 580, lineHeight: 1.62 }}>
               Every run produces a ranked set of gaps, generated research questions, a downloadable
@@ -510,7 +527,7 @@ function Head({ kicker, title, sub }: { kicker: string; title: string; sub?: str
       <div style={{ marginBottom: 26, maxWidth: 800 }}>
         <div className="eyebrow" style={{ marginBottom: 11, color: "var(--copper)" }}>{kicker}</div>
         <h2 className="display" style={{ fontSize: "clamp(27px, 3.8vw, 44px)", margin: 0, fontWeight: 300 }}>
-          {title}
+          <KineticLine text={title} step={0.042} />
         </h2>
         {sub && (
           <p style={{ margin: "13px 0 0", fontSize: 15.5, color: "var(--muted)", lineHeight: 1.62 }}>{sub}</p>

@@ -66,7 +66,14 @@ export function GlassNav() {
     >
       <div
         className="wrap"
-        style={{ height: 62, display: "flex", alignItems: "center", gap: 16 }}
+        style={{
+          height: 62,
+          display: "flex",
+          alignItems: "center",
+          gap: 16,
+          // The bar spans the viewport, its contents sit centred inside it.
+          justifyContent: "center",
+        }}
       >
         <Link
           href="/"
@@ -107,8 +114,6 @@ export function GlassNav() {
             </a>
           ))}
         </nav>
-
-        <div style={{ flex: 1, minWidth: 6 }} />
 
         <Link
           href="/studio"
