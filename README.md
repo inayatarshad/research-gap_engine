@@ -9,6 +9,8 @@ non-problem, and shows the papers behind every number it prints.
 Built over **16,605 papers**, **73 languages**, **26 tasks** and **1,722 venues**, spanning
 2008 to 2026.
 
+*Used to scope a **top 10 of 250+** entry at **NeuroLogic '26: Global NLP Datathon**.*
+
 > A *lacuna* is a gap in a manuscript, the place where the text is missing.
 
 ---
@@ -56,6 +58,22 @@ so a reader can disagree with the weighting rather than the conclusion.
   analysis rather than in a footnote.
 - **Exportable brief and shareable links.** Every run produces a Markdown research brief including
   method and limitations, and a URL that reopens the exact analysis.
+
+## Used in practice
+
+Lacuņa was built to answer a question about a field, and it was first put to work on one.
+**Challenge 3 of NeuroLogic '26: Global NLP Datathon** asked for a multi-label classifier detecting
+threats, obscenity, insults and identity-based hate across multilingual text, scored on mean
+ROC-AUC.
+
+It served as the reconnaissance step before any modelling. The coverage matrix showed which
+languages carried genuine toxicity literature and which were close to empty, and the concentration
+index exposed how far published toxicity work leans on a small number of corpora. That shaped two
+decisions: which languages to treat as transfer sources rather than train targets, and where a
+strong reported benchmark score was likely to be corpus-specific rather than evidence of real
+generalisation.
+
+The entry placed **top 10 out of 250+ projects**.
 
 ## Method
 

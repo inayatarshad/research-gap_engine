@@ -101,6 +101,7 @@ function Hero({ overview }: { overview: Overview }) {
           </a>
         </div>
 
+        <Credential />
         <HeroMetrics overview={overview} />
         </div>
 
@@ -109,6 +110,46 @@ function Hero({ overview }: { overview: Overview }) {
         </div>
       </div>
     </section>
+  );
+}
+
+/**
+ * Kept apart from the metrics row on purpose. Those are facts about the
+ * corpus; this is a fact about the work, and folding one into the other would
+ * blur what either number is claiming.
+ */
+function Credential() {
+  return (
+    <div
+      className="glass"
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 10,
+        padding: "8px 14px 8px 12px",
+        borderRadius: 999,
+        marginTop: 24,
+        animation: "fade .9s ease 1.45s both",
+      }}
+    >
+      <span
+        aria-hidden
+        style={{
+          width: 6,
+          height: 6,
+          borderRadius: 99,
+          background: "var(--copper)",
+          flexShrink: 0,
+        }}
+      />
+      <span style={{ fontSize: 13.2, lineHeight: 1.35 }}>
+        <strong style={{ fontWeight: 600 }}>Top 10 of 250+</strong>
+        <span style={{ color: "var(--muted)" }}>
+          {" "}
+          at NeuroLogic &rsquo;26 Global NLP Datathon
+        </span>
+      </span>
+    </div>
   );
 }
 
