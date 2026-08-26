@@ -143,7 +143,7 @@ function Credential() {
         }}
       />
       <span style={{ fontSize: 13.2, lineHeight: 1.35 }}>
-        <strong style={{ fontWeight: 600 }}>Top 10 of 250+</strong>
+        <strong style={{ fontWeight: 600 }}>Top 25 of 250+</strong>
         <span style={{ color: "var(--muted)" }}>
           {" "}
           at NeuroLogic &rsquo;26 Global NLP Datathon

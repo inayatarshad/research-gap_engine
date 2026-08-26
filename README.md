@@ -9,7 +9,7 @@ non-problem, and shows the papers behind every number it prints.
 Built over **16,605 papers**, **73 languages**, **26 tasks** and **1,722 venues**, spanning
 2008 to 2026.
 
-*Used to scope a **top 10 of 250+** entry at **NeuroLogic '26: Global NLP Datathon**.*
+*Used to scope a **top 25 of 250+** entry at **NeuroLogic '26: Global NLP Datathon**.*
 
 > A *lacuna* is a gap in a manuscript, the place where the text is missing.
 
@@ -73,7 +73,7 @@ decisions: which languages to treat as transfer sources rather than train target
 strong reported benchmark score was likely to be corpus-specific rather than evidence of real
 generalisation.
 
-The entry placed **top 10 out of 250+ projects**.
+The entry placed **top 25 out of 250+ projects**.
 
 ## Method
 
