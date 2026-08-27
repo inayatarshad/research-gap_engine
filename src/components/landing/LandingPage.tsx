@@ -94,7 +94,7 @@ function Hero({ overview }: { overview: Overview }) {
             animation: "fade .9s ease 1.05s both",
           }}
         >
-          Built for researchers who want to build where science needs them most, indexing{" "}
+          Built for researchers who want to work where science needs them most, indexing{" "}
           <strong style={{ color: "var(--ink)", fontWeight: 600 }}>
             <Counter value={overview.papers} duration={1700} delay={700} />
           </strong>{" "}
