@@ -691,7 +691,7 @@ a {
 
 .hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+  grid-template-columns: minmax(0, 1.24fr) minmax(0, 0.76fr);
   gap: clamp(24px, 4vw, 56px);
   align-items: center;
 }

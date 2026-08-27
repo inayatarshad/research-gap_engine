@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 import type { Overview } from "@/lib/overview";
 import { PRESETS } from "@/lib/presets";
@@ -9,7 +10,7 @@ import { Counter, Reveal, useInView } from "../motion";
 import { Architecture } from "./Architecture";
 import { Carousel } from "./Carousel";
 import { GlassNav } from "./GlassNav";
-import { KineticLine, Rotator, ScrollWords } from "./Kinetic";
+import { KineticLine, ScrollWords } from "./Kinetic";
 import { Constellation } from "./Constellation";
 
 /**
@@ -70,28 +71,37 @@ function Hero({ overview }: { overview: Overview }) {
 
         <h1
           className="display"
-          style={{ fontSize: "clamp(29px, 3.9vw, 55px)", margin: 0, fontWeight: 300, whiteSpace: "nowrap" }}
+          style={{ fontSize: "clamp(27px, 3.4vw, 48px)", margin: 0, fontWeight: 300, whiteSpace: "nowrap" }}
         >
-          <KineticLine text="Every field has a shape." delay={0.1} />
+          <KineticLine text="Every field has a map." delay={0.1} />
           <br />
-          <KineticLine text="The holes have one too." delay={0.42} color="var(--copper)" weight={400} />
+          <KineticLine
+            text="We trace what is left uncharted."
+            delay={0.4}
+            color="var(--copper)"
+            weight={400}
+          />
         </h1>
 
-        <div
+        <p
           style={{
-            marginTop: 24,
-            fontSize: "clamp(16px, 1.7vw, 20px)",
+            marginTop: 22,
+            marginBottom: 0,
+            fontSize: "clamp(15.5px, 1.55vw, 18.5px)",
             color: "var(--muted)",
-            maxWidth: 720,
-            lineHeight: 1.6,
+            maxWidth: 620,
+            lineHeight: 1.62,
             animation: "fade .9s ease 1.05s both",
           }}
         >
-          Lacuņa reads {overview.papers.toLocaleString()} papers to find what nobody has studied in{" "}
-          <Rotator words={["Urdu", "Sindhi", "Yoruba", "Saraiki", "Amharic", "Maithili"]} />
-        </div>
+          Built for researchers who want to build where science needs them most, indexing{" "}
+          <strong style={{ color: "var(--ink)", fontWeight: 600 }}>
+            <Counter value={overview.papers} duration={1700} delay={700} />
+          </strong>{" "}
+          publications to expose critical, overlooked gaps.
+        </p>
 
-        <div style={{ display: "flex", gap: 11, marginTop: 30, flexWrap: "wrap", animation: "fade .9s ease 1.25s both" }}>
+        <div style={{ display: "flex", gap: 11, marginTop: 26, flexWrap: "wrap", animation: "fade .9s ease 1.25s both" }}>
           <Link href="/studio" className="btn btn-primary" style={{ padding: "12px 22px", fontSize: 14.5 }}>
             Enter system
             <span aria-hidden style={{ opacity: 0.75 }}>→</span>
@@ -128,7 +138,7 @@ function Credential() {
         gap: 10,
         padding: "8px 14px 8px 12px",
         borderRadius: 999,
-        marginTop: 24,
+        marginTop: 20,
         animation: "fade .9s ease 1.45s both",
       }}
     >
@@ -155,7 +165,10 @@ function Credential() {
 
 /** Compact headline figures under the hero copy. */
 function HeroMetrics({ overview }: { overview: Overview }) {
-  const [ref, seen] = useInView<HTMLDivElement>("-20px");
+  // These sit above the fold, so waiting for a scroll trigger meant they were
+  // already being read while still showing zero. They run on mount instead.
+  const [seen, setSeen] = useState(false);
+  useEffect(() => setSeen(true), []);
   const items = [
     { v: overview.papers, s: "", l: "papers indexed" },
     { v: overview.languages, s: "", l: "languages tagged" },
@@ -163,9 +176,8 @@ function HeroMetrics({ overview }: { overview: Overview }) {
   ];
   return (
     <div
-      ref={ref}
       className="hairline"
-      style={{ display: "flex", gap: "clamp(22px, 4vw, 46px)", marginTop: 38, paddingTop: 22, flexWrap: "wrap" }}
+      style={{ display: "flex", gap: "clamp(22px, 4vw, 46px)", marginTop: 32, paddingTop: 20, flexWrap: "wrap" }}
     >
       {items.map((m, i) => (
         <div key={m.l}>
