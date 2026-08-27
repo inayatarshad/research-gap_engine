@@ -26,11 +26,13 @@ function cannotAnimate() {
 /**
  * Fires once when the element first scrolls into view.
  *
- * Deliberately fail-open. Content is hidden until this returns true, so any
- * situation where IntersectionObserver stays dormant (a background or
- * non-composited tab, a prerender, an unsupported engine) would otherwise
- * leave the page permanently blank. Three independent paths can reveal it:
- * a synchronous geometry check on mount, the observer itself, and a timeout.
+ * An earlier version carried a blanket 2.5s timeout as a safety net against
+ * IntersectionObserver never firing. That defeated the whole point: every
+ * element on the page, however far below the fold, revealed itself two and a
+ * half seconds after load, so by the time a reader scrolled down everything
+ * had already animated off screen. The observer is supported everywhere this
+ * app runs, so it is trusted, and only a genuinely missing implementation or
+ * an explicit reduced-motion preference short circuits to the final state.
  */
 export function useInView<T extends HTMLElement>(rootMargin = "-40px") {
   const ref = useRef<T>(null);
@@ -40,41 +42,32 @@ export function useInView<T extends HTMLElement>(rootMargin = "-40px") {
     const el = ref.current;
     if (!el || seen) return;
 
-    // 0. Nothing is being painted, so nothing can be observed.
-    if (cannotAnimate()) {
+    // Respect the preference, and cover the case where there is nothing to
+    // observe with.
+    if (prefersReducedMotion() || typeof IntersectionObserver === "undefined") {
       setSeen(true);
       return;
     }
 
-    // 1. Already on screen when mounted.
+    // Already on screen at mount: reveal without waiting for a scroll that may
+    // never come.
     const rect = el.getBoundingClientRect();
     if (rect.top < window.innerHeight && rect.bottom > 0) {
       setSeen(true);
       return;
     }
 
-    // 2. The normal path.
-    let obs: IntersectionObserver | null = null;
-    if (typeof IntersectionObserver !== "undefined") {
-      obs = new IntersectionObserver(
-        ([e]) => {
-          if (e.isIntersecting) {
-            setSeen(true);
-            obs?.disconnect();
-          }
-        },
-        { rootMargin },
-      );
-      obs.observe(el);
-    }
-
-    // 3. Safety net: never let an animation gate hide content for good.
-    const fallback = setTimeout(() => setSeen(true), 2500);
-
-    return () => {
-      obs?.disconnect();
-      clearTimeout(fallback);
-    };
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setSeen(true);
+          obs.disconnect();
+        }
+      },
+      { rootMargin },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
   }, [seen, rootMargin]);
 
   return [ref, seen] as const;
