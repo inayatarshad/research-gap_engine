@@ -181,9 +181,12 @@ export function getOverview(): Overview {
     yearCurve,
     voids: flat.filter((n) => n === 0).length,
     totalCells: flat.length,
+    // Every tagged language, not a top-N. A cap here silently drops exactly the
+    // languages with the fewest papers, which are the ones this graph exists
+    // to show. The ceiling is only a guard against a runaway taxonomy.
     graph: [...langCounts.entries()]
       .sort((a, b) => b[1] - a[1])
-      .slice(0, 72)
+      .slice(0, 120)
       .map(([code, n]) => {
         const l = LANG_BY_CODE.get(code);
         if (!l) return null;

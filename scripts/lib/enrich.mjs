@@ -19,7 +19,7 @@ export async function loadTaxonomy() {
     .replace(/^import[\s\S]*?;$/gm, "")
     .replace(/export interface [\s\S]*?\n}\n/g, "")
     .replace(/export type [^\n]*\n/g, "")
-    .replace(/:\s*(LanguageEntry|TaskEntry|MethodEntry)\[\]\s*=/g, " =")
+    .replace(/:\s*(LanguageEntry|TaskEntry|MethodEntry|LanguageGroup)\[\]\s*=/g, " =")
     .replace(/:\s*Record<ResourceTier,\s*string>\s*=/g, " =")
     .replace(/export const/g, "const");
   const mod = `${js}\nexport { LANGUAGES, TASKS, METHODS, KNOWN_DATASETS, CODE_MIXED_ALIASES };`;

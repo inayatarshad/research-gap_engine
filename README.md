@@ -1,12 +1,12 @@
 # Lacuņa
 
-**Every field has a shape. The holes have one too.**
+**Every field has a map. We trace what is left uncharted.**
 
 Lacuņa maps what NLP research is studying and, more usefully, what it keeps skipping. It scores
 under-researched language and task pairings, argues why each one is a real gap rather than a
 non-problem, and shows the papers behind every number it prints.
 
-Built over **16,605 papers**, **73 languages**, **26 tasks** and **1,722 venues**, spanning
+Built over **16,612 papers**, **79 languages**, **26 tasks** and **1,722 venues**, spanning
 2008 to 2026.
 
 *Used to scope a **top 25 of 250+** entry at **NeuroLogic '26: Global NLP Datathon**.*
@@ -28,7 +28,7 @@ wrong with that.
 
 The corpus bears this out. **48%** of papers carrying a language tag never leave the highest
 resource tier. Saraiki has roughly **13 million speakers for every indexed paper** written about
-it, against **3,576** for English.
+it, against **3,577** for English.
 
 ## What it does
 
@@ -140,14 +140,14 @@ npx vercel deploy --prod
 
 Cold start is about 3 s while the corpus is parsed and the inverted index is built. Warm requests
 return in roughly 250 ms. The runtime footprint is about 410 MB RSS, 175 MB of it the parsed corpus
-and the rest an inverted index over 57,722 distinct terms. Both are process-wide singletons, and
+and the rest an inverted index over 57,730 distinct terms. Both are process-wide singletons, and
 Fluid Compute reuses instances across concurrent requests, so that cost is paid once per instance
 rather than once per request.
 
 ## Architecture
 
 ```
-data/corpus.json              16,605 enriched papers (generated, committed)
+data/corpus.json              16,612 enriched papers (generated, committed)
 
 scripts/
   build-corpus.mjs            ACL Anthology + OpenAlex -> enriched corpus

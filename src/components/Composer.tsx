@@ -84,9 +84,11 @@ export function Composer({
 
   const ready = Boolean(scope.query.trim() || scope.languages.length || scope.tasks.length);
 
+  // Uncapped in practice: a limit of 60 started hiding languages as soon as the
+  // taxonomy grew past it, and the list already scrolls.
   const langOptions = SUGGEST_LANGS.filter((l) =>
     l.name.toLowerCase().includes(filter.toLowerCase()),
-  ).slice(0, 60);
+  ).slice(0, 150);
   const taskOptions = TASKS.filter((t) =>
     t.name.toLowerCase().includes(filter.toLowerCase()),
   );

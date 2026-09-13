@@ -32,6 +32,9 @@ for (const q of queries) {
     inferredLanguages: parsed.languages,
     inferredTasks: parsed.tasks,
     corpusFreq: index.df,
+    // The harness runs the exact scope only; the widening ladder lives in
+    // engine.ts, which cannot be imported outside Next because of server-only.
+    relaxation: { applied: false, note: null, dropped: [], exactCount: cohort.length },
   });
   const ms = Date.now() - t;
 

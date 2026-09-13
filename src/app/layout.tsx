@@ -31,7 +31,7 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Lacuņa, Research Gap & Discovery Engine",
   description:
-    "Lacuņa maps what a research field is studying and what it keeps skipping. It analyses 16,605 NLP papers to score under-researched language and task pairings, with the evidence behind every number.",
+    "Lacuņa maps what a research field is studying and what it keeps skipping. It analyses 16,612 NLP papers to score under-researched language and task pairings, with the evidence behind every number.",
   openGraph: {
     title: "Lacuņa, Research Gap & Discovery Engine",
     description: "Map what a research field is studying, and what it keeps skipping.",

@@ -138,8 +138,23 @@ export const LANGUAGES: LanguageEntry[] = [
   { name: "Maori", code: "mi", tier: 0, speakersM: 0.2, family: "Austronesian", script: "Latin", aliases: ["maori", "te reo"] },
   { name: "Javanese", code: "jv", tier: 1, speakersM: 82, family: "Austronesian", script: "Latin", aliases: ["javanese"] },
   { name: "Sundanese", code: "su", tier: 1, speakersM: 32, family: "Austronesian", script: "Latin", aliases: ["sundanese"] },
-  { name: "Bhojpuri", code: "bho", tier: 0, speakersM: 52, family: "Indo-European", script: "Devanagari", aliases: ["bhojpuri"] },
+  // Class 1 in Joshi et al.'s published table (lang2tax.txt); was wrongly 0 here.
+  { name: "Bhojpuri", code: "bho", tier: 1, speakersM: 52, family: "Indo-European", script: "Devanagari", aliases: ["bhojpuri"] },
   { name: "Maithili", code: "mai", tier: 0, speakersM: 34, family: "Indo-European", script: "Devanagari", aliases: ["maithili"] },
+
+  // --- Siberia, the Russian Far East, Xinjiang and Arnhem Land ---
+  // Classes read from Joshi et al.'s lang2tax.txt unless noted.
+  { name: "Evenki", code: "evn", tier: 0, speakersM: 0.005, family: "Tungusic", script: "Cyrillic", aliases: ["evenki", "ewenki"] },
+  { name: "Chukchi", code: "ckt", tier: 0, speakersM: 0.005, family: "Chukotko-Kamchatkan", script: "Cyrillic", aliases: ["chukchi"] },
+  { name: "Itelmen", code: "itl", tier: 0, speakersM: 0.0001, family: "Chukotko-Kamchatkan", script: "Cyrillic", aliases: ["itelmen"] },
+  // Joshi et al. list this language twice: "sakha,1" and "yakut,0". The class 1
+  // entry is used, since the language has a Wikipedia and some unlabelled text.
+  { name: "Sakha", code: "sah", tier: 1, speakersM: 0.45, family: "Turkic", script: "Cyrillic", aliases: ["sakha", "yakut"] },
+  { name: "Tuvan", code: "tyv", tier: 1, speakersM: 0.28, family: "Turkic", script: "Cyrillic", aliases: ["tuvan", "tuvinian", "tyvan"] },
+  // Not in Joshi et al.'s table. Assigned class 0 from the class definition.
+  { name: "Xibe", code: "sjo", tier: 0, speakersM: 0.03, family: "Tungusic", script: "Xibe", aliases: ["xibe", "sibe"] },
+  // Listed by Joshi et al. under the dialect chain name, Bininj Gun-wok.
+  { name: "Kunwinjku", code: "gup", tier: 0, speakersM: 0.0017, family: "Gunwinyguan", script: "Latin", aliases: ["kunwinjku", "bininj gun-wok", "bininj kunwok", "gunwinggu"] },
 ];
 
 /** Pseudo-language buckets: not languages, but first-class objects of study. */
@@ -336,6 +351,12 @@ export const LANGUAGE_GROUPS: LanguageGroup[] = [
     name: "Arabic-script languages",
     aliases: ["arabic script", "arabic-script", "perso-arabic", "nastaliq"],
     codes: ["ar", "fa", "ur", "ps", "sd", "ug", "ku", "bal", "skr", "ks", "brh"],
+  },
+  {
+    id: "siberian",
+    name: "Languages of Siberia",
+    aliases: ["siberian languages", "languages of siberia", "siberian", "russian far east"],
+    codes: ["evn", "ckt", "itl", "sah", "tyv"],
   },
 ];
 
